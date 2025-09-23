@@ -57,8 +57,10 @@ class RemoteMovieLoader {
             }
             
             do {
-                try JSONSerialization.jsonObject(with: data)
-                return []
+                let jsonDecoder = JSONDecoder()
+                jsonDecoder.dateDecodingStrategy = .iso8601
+                let movies = try jsonDecoder.decode(Root<[Movie]>.self, from: data)
+                return movies.items
             } catch {
                 throw Error.invalidData
             }
@@ -66,6 +68,14 @@ class RemoteMovieLoader {
         case .failure:
             throw Error.connectivity
         }
+    }
+}
+
+private struct Root<Resource>: Decodable where Resource: Decodable {
+    let items: Resource
+    
+    private enum CodingKeys: String, CodingKey {
+        case items = "entry"
     }
 }
 
@@ -141,6 +151,31 @@ final class RemoteMovieLoaderTests: XCTestCase {
         }
     }
     
+    func test_load_deliversItemsOn200HTTPResponseWithJSONItems() async {
+        let url = URL(string: "http://any-url.com")!
+        let (sut, client) = makeSUT(url: url)
+        
+        let movie1 = makeMovie()
+        let movie1JSON = makeJSON(from: movie1)
+        let movie2 = makeMovie()
+        let movie2JSON = makeJSON(from: movie2)
+        
+        let itemsJSON = [
+            "entry": [movie1JSON, movie2JSON]
+        ]
+        let jsonData = try! JSONSerialization.data(withJSONObject: itemsJSON)
+        let httpResponse = HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: nil)!
+        
+        client.didComplete(with: .success((jsonData, httpResponse)))
+        
+        do {
+            let result = try await sut.load()
+            XCTAssertEqual(result, [movie1, movie2])
+        } catch {
+            XCTFail("Expected empty result, got \(error) instead")
+        }
+    }
+    
     private func makeSUT(
         url: URL = URL(string: "http://any-url.com")!,
         with result: HTTPClient.Result = .failure(NSError(domain: "any error", code: -1)),
@@ -150,4 +185,68 @@ final class RemoteMovieLoaderTests: XCTestCase {
         
         return (sut, client)
     }
+}
+
+func makeMovie(id: UUID = UUID()) -> Movie {
+    Movie(
+        id: id.uuidString,
+        name: "any name",
+        summary: "any summary",
+        title: "any title",
+        releaseDate: .distantPast,
+        rights: "any rights",
+        rentalPrice: Price(
+            label: "12.99$",
+            amount: 12.99,
+            currency: "USD"
+        ),
+        price: Price(
+            label: "21.99$",
+            amount: 21.99,
+            currency: "USD"
+        ),
+        artist: "any artist",
+        category: "any category",
+        contentType: .movie,
+        duration: 12345,
+        images: [
+            ImageItem(
+                url: URL(string: "http://some-url.com")!,
+                attributes: .init(height: 60)
+            )
+        ]
+    )
+}
+
+func makeJSON(from movie: Movie) -> [String: Any] {
+    return [
+        "id": movie.id,
+        "name": movie.name,
+        "summary": movie.summary,
+        "title": movie.title,
+        "releaseDate": movie.releaseDate.ISO8601Format(),
+        "rights": movie.rights,
+        "rentalPrice": [
+            "label": movie.rentalPrice.label,
+            "amount": movie.rentalPrice.amount,
+            "currency": movie.rentalPrice.currency
+        ],
+        "price": [
+            "label": movie.price.label,
+            "amount": movie.price.amount,
+            "currency": movie.price.currency
+        ],
+        "artist": movie.artist,
+        "category": movie.category,
+        "contentType": movie.contentType.rawValue,
+        "duration": movie.duration,
+        "images": movie.images.map {
+            [
+                "url": $0.url.absoluteString,
+                "attributes": [
+                    "height": $0.attributes.height
+                ]
+            ]
+        }
+    ]
 }
