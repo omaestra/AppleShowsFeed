@@ -129,7 +129,7 @@ final class RemoteMovieLoaderTests: XCTestCase {
         with result: HTTPClient.Result = .failure(NSError(domain: "any error", code: -1)),
     ) -> (RemoteMovieLoader, HTTPClientSpy) {
         let client = HTTPClientSpy()
-        let sut = RemoteMovieLoader(url: url, client: client)
+        let sut = RemoteMovieLoader(url: url, client: client, mapper: MoviesMapper.map)
         
         return (sut, client)
     }
