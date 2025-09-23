@@ -9,7 +9,9 @@ import XCTest
 import AppleShowsFeed
 
 protocol HTTPClient {
-    func get(from url: URL) async -> Result<(Data, HTTPURLResponse), Error>
+    typealias Result = Swift.Result<(Data, HTTPURLResponse), Error>
+    
+    func get(from url: URL) async -> Result
 }
 
 class HTTPClientSpy: HTTPClient {
@@ -17,12 +19,12 @@ class HTTPClientSpy: HTTPClient {
     var error: Error?
     var result: Result<(Data, HTTPURLResponse), Error>?
     
-    func get(from url: URL) async -> Result<(Data, HTTPURLResponse), Error> {
+    func get(from url: URL) async -> HTTPClient.Result {
         self.requestedURL = url
         return result ?? .failure(NSError(domain: "any error", code: -1))
     }
     
-    func didComplete(with result: Result<(Data, HTTPURLResponse), Error>) {
+    func didComplete(with result: HTTPClient.Result) {
         self.result = result
     }
     
