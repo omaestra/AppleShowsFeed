@@ -8,7 +8,11 @@
 import XCTest
 import AppleShowsFeed
 
-class HTTPClient {
+protocol HTTPClient {
+    func get(from url: URL)
+}
+
+class HTTPClientSpy: HTTPClient {
     var requestedURL: URL?
     
     func get(from url: URL) {
@@ -17,22 +21,25 @@ class HTTPClient {
 }
 
 class RemoteMovieLoader {
-    var client: HTTPClient
+    let url: URL
+    let client: HTTPClient
     
-    init(client: HTTPClient) {
+    init(url: URL, client: HTTPClient) {
+        self.url = url
         self.client = client
     }
     
     func load() async throws -> [Movie] {
-        client.get(from: URL(string: "https://some-url.com")!)
+        client.get(from: url)
         return []
     }
 }
 
 final class RemoteMovieLoaderTests: XCTestCase {
     func test_load_requestsDataFromURL() async {
-        let client = HTTPClient()
-        let sut = RemoteMovieLoader(client: client)
+        let url = URL(string: "http://any-url.com")!
+        let client = HTTPClientSpy()
+        let sut = RemoteMovieLoader(url: url, client: client)
         
         _ = try? await sut.load()
         
