@@ -48,21 +48,23 @@ class RemoteMovieLoader {
     }
     
     func load() async throws -> [Movie] {
-        do {
-            let result = await client.get(from: url)
-            
-            switch result {
-            case let .success((_, response)):
-                guard response.statusCode == 200 else {
-                    throw Error.invalidData
-                }
-                
+        let result = await client.get(from: url)
+        
+        switch result {
+        case let .success((data, response)):
+            guard response.statusCode == 200 else {
                 throw Error.invalidData
-            case .failure:
-                throw Error.connectivity
             }
-        } catch {
-            throw error
+            
+            do {
+                try JSONSerialization.jsonObject(with: data)
+                return []
+            } catch {
+                throw Error.invalidData
+            }
+            
+        case .failure:
+            throw Error.connectivity
         }
     }
 }
