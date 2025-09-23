@@ -124,6 +124,23 @@ final class RemoteMovieLoaderTests: XCTestCase {
         }
     }
     
+    func test_load_deliversEmptyOn200HTTPResponseWithEmptyJSONList() async {
+        let url = URL(string: "http://any-url.com")!
+        let (sut, client) = makeSUT(url: url)
+        
+        let emptyListJSON = Data("{\"entry\": []}".utf8)
+        let httpResponse = HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: nil)!
+        
+        client.didComplete(with: .success((emptyListJSON, httpResponse)))
+        
+        do {
+            let result = try await sut.load()
+            XCTAssertEqual(result, [])
+        } catch {
+            XCTFail("Expected empty result, got \(error) instead")
+        }
+    }
+    
     private func makeSUT(
         url: URL = URL(string: "http://any-url.com")!,
         with result: HTTPClient.Result = .failure(NSError(domain: "any error", code: -1)),
