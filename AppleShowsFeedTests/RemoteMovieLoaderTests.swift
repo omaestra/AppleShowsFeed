@@ -8,12 +8,6 @@
 import XCTest
 import AppleShowsFeed
 
-protocol HTTPClient {
-    typealias Result = Swift.Result<(Data, HTTPURLResponse), Error>
-    
-    func get(from url: URL) async -> Result
-}
-
 class HTTPClientSpy: HTTPClient {
     var requestedURL: URL?
     var error: Error?
@@ -30,52 +24,6 @@ class HTTPClientSpy: HTTPClient {
     
     func didComplete(with error: Error) {
         self.result = .failure(error)
-    }
-}
-
-class RemoteMovieLoader {
-    public enum Error: Swift.Error {
-        case connectivity
-        case invalidData
-    }
-    
-    let url: URL
-    let client: HTTPClient
-    
-    init(url: URL, client: HTTPClient) {
-        self.url = url
-        self.client = client
-    }
-    
-    func load() async throws -> [Movie] {
-        let result = await client.get(from: url)
-        
-        switch result {
-        case let .success((data, response)):
-            guard response.statusCode == 200 else {
-                throw Error.invalidData
-            }
-            
-            do {
-                let jsonDecoder = JSONDecoder()
-                jsonDecoder.dateDecodingStrategy = .iso8601
-                let movies = try jsonDecoder.decode(Root<[Movie]>.self, from: data)
-                return movies.items
-            } catch {
-                throw Error.invalidData
-            }
-            
-        case .failure:
-            throw Error.connectivity
-        }
-    }
-}
-
-private struct Root<Resource>: Decodable where Resource: Decodable {
-    let items: Resource
-    
-    private enum CodingKeys: String, CodingKey {
-        case items = "entry"
     }
 }
 
