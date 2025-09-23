@@ -7,37 +7,37 @@
 
 import Foundation
 
-enum FeedContentType {
+public enum FeedContentType {
     case movie
 }
 
-struct ImageAttributes {
-    let height: Int
+public struct ImageAttributes {
+    public let height: Int
 }
 
-struct ImageItem {
-    let url: URL
-    let attributes: ImageAttributes
+public struct ImageItem {
+    public let url: URL
+    public let attributes: ImageAttributes
 }
 
-struct Price {
-    let label: String
-    let amount: Double
-    let currency: String
+public struct Price {
+    public let label: String
+    public let amount: Double
+    public let currency: String
 }
 
-struct Movie {
-    let id: String
-    let name: String
-    let summary: String
-    let title: String
-    let releaseDate: Date
-    let rights: String
-    let rentalPrice: Price
-    let price: Price
-    let artist: String
-    let category: String
-    let contentType: FeedContentType
-    let duration: Double
-    let images: [ImageItem]
+public struct Movie {
+    public let id: String
+    public let name: String
+    public let summary: String
+    public let title: String
+    public let releaseDate: Date
+    public let rights: String
+    public let rentalPrice: Price
+    public let price: Price
+    public let artist: String
+    public let category: String
+    public let contentType: FeedContentType
+    public let duration: Double
+    public let images: [ImageItem]
 }
