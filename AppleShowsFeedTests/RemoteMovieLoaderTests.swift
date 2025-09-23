@@ -9,22 +9,32 @@ import XCTest
 import AppleShowsFeed
 
 protocol HTTPClient {
-    func get(from url: URL) throws
+    func get(from url: URL) async -> Result<(Data, HTTPURLResponse), Error>
 }
 
 class HTTPClientSpy: HTTPClient {
     var requestedURL: URL?
     var error: Error?
+    var result: Result<(Data, HTTPURLResponse), Error>?
     
-    func get(from url: URL) throws {
-        if let error { throw error }
+    func get(from url: URL) async -> Result<(Data, HTTPURLResponse), Error> {
         self.requestedURL = url
+        return result ?? .failure(NSError(domain: "any error", code: -1))
+    }
+    
+    func didComplete(with result: Result<(Data, HTTPURLResponse), Error>) {
+        self.result = result
+    }
+    
+    func didComplete(with error: Error) {
+        self.result = .failure(error)
     }
 }
 
 class RemoteMovieLoader {
     public enum Error: Swift.Error {
         case connectivity
+        case invalidData
     }
     
     let url: URL
@@ -37,11 +47,22 @@ class RemoteMovieLoader {
     
     func load() async throws -> [Movie] {
         do {
-            try client.get(from: url)
+            let result = await client.get(from: url)
+            
+            switch result {
+            case let .success((_, response)):
+                guard response.statusCode == 200 else {
+                    throw Error.invalidData
+                }
+                
+                return []
+                
+            case .failure:
+                throw Error.connectivity
+            }
         } catch {
-            throw Error.connectivity
+            throw error
         }
-        return []
     }
 }
 
@@ -59,14 +80,33 @@ final class RemoteMovieLoaderTests: XCTestCase {
     func test_load_deliversErrorOnClientError() async {
         let url = URL(string: "http://any-url.com")!
         let client = HTTPClientSpy()
-        client.error = NSError(domain: "any error", code: -1)
         let sut = RemoteMovieLoader(url: url, client: client)
+        
+        client.didComplete(with: NSError(domain: "any error", code: -1))
         
         do {
             _ = try await sut.load()
             XCTFail("Expected failure, got success instead")
         } catch {
             XCTAssertEqual(error as? RemoteMovieLoader.Error, .connectivity)
+        }
+    }
+    
+    func test_load_deliversErrorOnNon200HTTPResponse() async {
+        let url = URL(string: "http://any-url.com")!
+        let client = HTTPClientSpy()
+        
+        let httpResponse = HTTPURLResponse(url: url, statusCode: 400, httpVersion: nil, headerFields: nil)!
+        let data = Data()
+        
+        let sut = RemoteMovieLoader(url: url, client: client)
+        
+        client.didComplete(with: .success((data, httpResponse)))
+        
+        do {
+            _ = try await sut.load()
+        } catch {
+            XCTAssertEqual(error as? RemoteMovieLoader.Error, .invalidData)
         }
     }
 }
