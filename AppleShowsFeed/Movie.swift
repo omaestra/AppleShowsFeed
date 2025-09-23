@@ -11,22 +11,22 @@ public enum FeedContentType {
     case movie
 }
 
-public struct ImageAttributes {
+public struct ImageAttributes: Equatable {
     public let height: Int
 }
 
-public struct ImageItem {
+public struct ImageItem: Equatable {
     public let url: URL
     public let attributes: ImageAttributes
 }
 
-public struct Price {
+public struct Price: Equatable {
     public let label: String
     public let amount: Double
     public let currency: String
 }
 
-public struct Movie {
+public struct Movie: Equatable {
     public let id: String
     public let name: String
     public let summary: String
