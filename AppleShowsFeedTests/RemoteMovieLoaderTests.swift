@@ -57,8 +57,7 @@ class RemoteMovieLoader {
                     throw Error.invalidData
                 }
                 
-                return []
-                
+                throw Error.invalidData
             case .failure:
                 throw Error.connectivity
             }
@@ -101,6 +100,23 @@ final class RemoteMovieLoaderTests: XCTestCase {
         
         do {
             _ = try await sut.load()
+        } catch {
+            XCTAssertEqual(error as? RemoteMovieLoader.Error, .invalidData)
+        }
+    }
+    
+    func test_load_deliversErrorOn200HTTPResponseWithInvalidJSON() async {
+        let url = URL(string: "http://any-url.com")!
+        let (sut, client) = makeSUT(url: url)
+        
+        let invalidJSON = Data("invalid json".utf8)
+        let httpResponse = HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: nil)!
+        
+        client.didComplete(with: .success((invalidJSON, httpResponse)))
+        
+        do {
+            _ = try await sut.load()
+            XCTFail("Expected invalid JSON error.")
         } catch {
             XCTAssertEqual(error as? RemoteMovieLoader.Error, .invalidData)
         }
