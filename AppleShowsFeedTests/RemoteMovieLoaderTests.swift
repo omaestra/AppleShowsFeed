@@ -70,9 +70,7 @@ class RemoteMovieLoader {
 
 final class RemoteMovieLoaderTests: XCTestCase {
     func test_load_requestsDataFromURL() async {
-        let url = URL(string: "http://any-url.com")!
-        let client = HTTPClientSpy()
-        let sut = RemoteMovieLoader(url: url, client: client)
+        let (sut, client) = makeSUT()
         
         _ = try? await sut.load()
         
@@ -80,9 +78,7 @@ final class RemoteMovieLoaderTests: XCTestCase {
     }
     
     func test_load_deliversErrorOnClientError() async {
-        let url = URL(string: "http://any-url.com")!
-        let client = HTTPClientSpy()
-        let sut = RemoteMovieLoader(url: url, client: client)
+        let (sut, client) = makeSUT()
         
         client.didComplete(with: NSError(domain: "any error", code: -1))
         
@@ -96,12 +92,10 @@ final class RemoteMovieLoaderTests: XCTestCase {
     
     func test_load_deliversErrorOnNon200HTTPResponse() async {
         let url = URL(string: "http://any-url.com")!
-        let client = HTTPClientSpy()
+        let (sut, client) = makeSUT()
         
         let httpResponse = HTTPURLResponse(url: url, statusCode: 400, httpVersion: nil, headerFields: nil)!
         let data = Data()
-        
-        let sut = RemoteMovieLoader(url: url, client: client)
         
         client.didComplete(with: .success((data, httpResponse)))
         
@@ -110,5 +104,15 @@ final class RemoteMovieLoaderTests: XCTestCase {
         } catch {
             XCTAssertEqual(error as? RemoteMovieLoader.Error, .invalidData)
         }
+    }
+    
+    private func makeSUT(
+        url: URL = URL(string: "http://any-url.com")!,
+        with result: HTTPClient.Result = .failure(NSError(domain: "any error", code: -1)),
+    ) -> (RemoteMovieLoader, HTTPClientSpy) {
+        let client = HTTPClientSpy()
+        let sut = RemoteMovieLoader(url: url, client: client)
+        
+        return (sut, client)
     }
 }
