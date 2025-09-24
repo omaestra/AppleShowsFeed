@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class RemoteMovieLoader {
+public class RemoteMovieLoader: MovieLoader {
     public enum Error: Swift.Error {
         case connectivity
         case invalidData
