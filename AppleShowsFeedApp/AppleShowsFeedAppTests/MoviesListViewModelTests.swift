@@ -9,6 +9,7 @@ import XCTest
 import AppleShowsFeed
 @testable import AppleShowsFeedApp
 
+@MainActor
 final class MoviesListViewModelTests: XCTestCase {
     func test_init_doesNotLoadMoviesOnInit() {
         let sut = MoviesListViewModel(movies: [])

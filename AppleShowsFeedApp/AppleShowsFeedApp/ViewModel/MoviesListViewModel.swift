@@ -8,11 +8,11 @@
 import Foundation
 import AppleShowsFeed
 
-final class MoviesListViewModel {
-    var movies: [Movie]
-    
-    var isLoading = false
-    var error: Error?
+@MainActor
+final class MoviesListViewModel: ObservableObject {
+    @Published private(set) var movies: [Movie]
+    @Published private(set) var isLoading = false
+    @Published private(set) var error: Error?
     
     init(movies: [Movie]) {
         self.movies = movies
