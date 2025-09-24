@@ -19,13 +19,6 @@
 			remoteGlobalIDString = CE889A592E842C4600FB7AD1;
 			remoteInfo = AppleShowsFeedApp;
 		};
-		CE889A722E842C4800FB7AD1 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = CE889A522E842C4600FB7AD1 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = CE889A592E842C4600FB7AD1;
-			remoteInfo = AppleShowsFeedApp;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -46,7 +39,6 @@
 		CE048A082E842CF80099859B /* AppleShowsFeed.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AppleShowsFeed.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE889A5A2E842C4600FB7AD1 /* AppleShowsFeedApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AppleShowsFeedApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE889A672E842C4800FB7AD1 /* AppleShowsFeedAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AppleShowsFeedAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		CE889A712E842C4800FB7AD1 /* AppleShowsFeedAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AppleShowsFeedAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -58,11 +50,6 @@
 		CE889A6A2E842C4800FB7AD1 /* AppleShowsFeedAppTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = AppleShowsFeedAppTests;
-			sourceTree = "<group>";
-		};
-		CE889A742E842C4800FB7AD1 /* AppleShowsFeedAppUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = AppleShowsFeedAppUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -77,13 +64,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		CE889A642E842C4800FB7AD1 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		CE889A6E2E842C4800FB7AD1 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -106,7 +86,6 @@
 			children = (
 				CE889A5C2E842C4600FB7AD1 /* AppleShowsFeedApp */,
 				CE889A6A2E842C4800FB7AD1 /* AppleShowsFeedAppTests */,
-				CE889A742E842C4800FB7AD1 /* AppleShowsFeedAppUITests */,
 				CE048A072E842CF80099859B /* Frameworks */,
 				CE889A5B2E842C4600FB7AD1 /* Products */,
 			);
@@ -117,7 +96,6 @@
 			children = (
 				CE889A5A2E842C4600FB7AD1 /* AppleShowsFeedApp.app */,
 				CE889A672E842C4800FB7AD1 /* AppleShowsFeedAppTests.xctest */,
-				CE889A712E842C4800FB7AD1 /* AppleShowsFeedAppUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -171,29 +149,6 @@
 			productReference = CE889A672E842C4800FB7AD1 /* AppleShowsFeedAppTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		CE889A702E842C4800FB7AD1 /* AppleShowsFeedAppUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = CE889A812E842C4800FB7AD1 /* Build configuration list for PBXNativeTarget "AppleShowsFeedAppUITests" */;
-			buildPhases = (
-				CE889A6D2E842C4800FB7AD1 /* Sources */,
-				CE889A6E2E842C4800FB7AD1 /* Frameworks */,
-				CE889A6F2E842C4800FB7AD1 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				CE889A732E842C4800FB7AD1 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				CE889A742E842C4800FB7AD1 /* AppleShowsFeedAppUITests */,
-			);
-			name = AppleShowsFeedAppUITests;
-			packageProductDependencies = (
-			);
-			productName = AppleShowsFeedAppUITests;
-			productReference = CE889A712E842C4800FB7AD1 /* AppleShowsFeedAppUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -208,10 +163,6 @@
 						CreatedOnToolsVersion = 16.4;
 					};
 					CE889A662E842C4800FB7AD1 = {
-						CreatedOnToolsVersion = 16.4;
-						TestTargetID = CE889A592E842C4600FB7AD1;
-					};
-					CE889A702E842C4800FB7AD1 = {
 						CreatedOnToolsVersion = 16.4;
 						TestTargetID = CE889A592E842C4600FB7AD1;
 					};
@@ -233,7 +184,6 @@
 			targets = (
 				CE889A592E842C4600FB7AD1 /* AppleShowsFeedApp */,
 				CE889A662E842C4800FB7AD1 /* AppleShowsFeedAppTests */,
-				CE889A702E842C4800FB7AD1 /* AppleShowsFeedAppUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -247,13 +197,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		CE889A652E842C4800FB7AD1 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		CE889A6F2E842C4800FB7AD1 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -277,13 +220,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		CE889A6D2E842C4800FB7AD1 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -291,11 +227,6 @@
 			isa = PBXTargetDependency;
 			target = CE889A592E842C4600FB7AD1 /* AppleShowsFeedApp */;
 			targetProxy = CE889A682E842C4800FB7AD1 /* PBXContainerItemProxy */;
-		};
-		CE889A732E842C4800FB7AD1 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = CE889A592E842C4600FB7AD1 /* AppleShowsFeedApp */;
-			targetProxy = CE889A722E842C4800FB7AD1 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -509,38 +440,6 @@
 			};
 			name = Release;
 		};
-		CE889A822E842C4800FB7AD1 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.omaestra.AppleShowsFeedAppUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = AppleShowsFeedApp;
-			};
-			name = Debug;
-		};
-		CE889A832E842C4800FB7AD1 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.omaestra.AppleShowsFeedAppUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = AppleShowsFeedApp;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -567,15 +466,6 @@
 			buildConfigurations = (
 				CE889A7F2E842C4800FB7AD1 /* Debug */,
 				CE889A802E842C4800FB7AD1 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		CE889A812E842C4800FB7AD1 /* Build configuration list for PBXNativeTarget "AppleShowsFeedAppUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				CE889A822E842C4800FB7AD1 /* Debug */,
-				CE889A832E842C4800FB7AD1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
