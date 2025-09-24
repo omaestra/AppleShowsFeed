@@ -11,8 +11,14 @@ import AppleShowsFeed
 final class MoviesListViewModel {
     let movies: [Movie]
     
+    var isLoading = false
+    
     init(movies: [Movie]) {
         self.movies = movies
+    }
+    
+    func didStartLoading() {
+        isLoading = true
     }
 }
 
@@ -21,5 +27,13 @@ final class MoviesListViewModelTests: XCTestCase {
         let sut = MoviesListViewModel(movies: [])
         
         XCTAssertEqual(sut.movies, [])
+    }
+    
+    func test_didStartLoading_setsIsLoadingToTrue() {
+        let sut = MoviesListViewModel(movies: [])
+        
+        sut.didStartLoading()
+        
+        XCTAssertEqual(sut.isLoading, true)
     }
 }
