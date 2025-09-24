@@ -29,6 +29,7 @@ final class MoviesListViewModel {
     
     func didFinishLoading(with movies: [Movie]) {
         self.movies = movies
+        self.isLoading = false
     }
 }
 
@@ -71,5 +72,14 @@ final class MoviesListViewModelTests: XCTestCase {
         
         XCTAssertNil(sut.error)
         XCTAssertEqual(sut.movies, [])
+    }
+    
+    func test_didFinishLoadingWithMovies_setsIsLoadingStateToFalse() {
+        let sut = MoviesListViewModel(movies: [])
+        
+        sut.didStartLoading()
+        sut.didFinishLoading(with: [])
+        
+        XCTAssertFalse(sut.isLoading)
     }
 }
