@@ -168,31 +168,54 @@ func makeMovie(id: UUID = UUID()) -> Movie {
 
 func makeJSON(from movie: Movie) -> [String: Any] {
     return [
-        "id": movie.id,
-        "name": movie.name,
-        "summary": movie.summary,
-        "title": movie.title,
-        "releaseDate": movie.releaseDate.ISO8601Format(),
-        "rights": movie.rights,
-        "rentalPrice": [
+        "id": [
+            "label": movie.id,
+            "attributes": [
+                "im:id": movie.id
+            ]
+        ],
+        "im:name": ["label": movie.name],
+        "summary": ["label": movie.summary],
+        "title": ["label": movie.title],
+        "im:releaseDate": [
+            "label": movie.releaseDate.ISO8601Format(),
+            "attributes": ["label": "July 25, 2025"]
+        ],
+        "rights": ["label": movie.rights],
+        "im:rentalPrice": [
             "label": movie.rentalPrice.label,
-            "amount": movie.rentalPrice.amount,
-            "currency": movie.rentalPrice.currency
+            "attributes": [
+                "amount": String(movie.rentalPrice.amount),
+                "currency": movie.rentalPrice.currency
+            ]
         ],
-        "price": [
+        "im:price": [
             "label": movie.price.label,
-            "amount": movie.price.amount,
-            "currency": movie.price.currency
+            "attributes": [
+                "amount": String(movie.price.amount),
+                "currency": movie.price.currency
+            ]
         ],
-        "artist": movie.artist,
-        "category": movie.category,
-        "contentType": movie.contentType.rawValue,
-        "duration": movie.duration,
-        "images": movie.images.map {
+        "im:artist": [
+            "label": movie.artist
+        ],
+        "category": [
+            "attributes": [
+                "im:id": "4401",
+                "term": "Action & Adventure",
+                "label": movie.category
+            ]
+        ],
+        "im:contentType": [
+            "attributes": [
+                "label": movie.contentType.rawValue
+            ]
+        ],
+        "im:image": movie.images.map {
             [
-                "url": $0.url.absoluteString,
+                "label": $0.url.absoluteString,
                 "attributes": [
-                    "height": $0.attributes.height
+                    "height": String($0.attributes.height ?? 0)
                 ]
             ]
         }
