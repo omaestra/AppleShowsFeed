@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		CE048A092E842CF80099859B /* AppleShowsFeed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE048A082E842CF80099859B /* AppleShowsFeed.framework */; };
+		CE048A0A2E842CF80099859B /* AppleShowsFeed.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = CE048A082E842CF80099859B /* AppleShowsFeed.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		CE889A682E842C4800FB7AD1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -23,7 +28,22 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		CE048A0B2E842CF80099859B /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				CE048A0A2E842CF80099859B /* AppleShowsFeed.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		CE048A082E842CF80099859B /* AppleShowsFeed.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AppleShowsFeed.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE889A5A2E842C4600FB7AD1 /* AppleShowsFeedApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AppleShowsFeedApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE889A672E842C4800FB7AD1 /* AppleShowsFeedAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AppleShowsFeedAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE889A712E842C4800FB7AD1 /* AppleShowsFeedAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AppleShowsFeedAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -52,6 +72,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CE048A092E842CF80099859B /* AppleShowsFeed.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -72,12 +93,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		CE048A072E842CF80099859B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				CE048A082E842CF80099859B /* AppleShowsFeed.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		CE889A512E842C4600FB7AD1 = {
 			isa = PBXGroup;
 			children = (
 				CE889A5C2E842C4600FB7AD1 /* AppleShowsFeedApp */,
 				CE889A6A2E842C4800FB7AD1 /* AppleShowsFeedAppTests */,
 				CE889A742E842C4800FB7AD1 /* AppleShowsFeedAppUITests */,
+				CE048A072E842CF80099859B /* Frameworks */,
 				CE889A5B2E842C4600FB7AD1 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -102,6 +132,7 @@
 				CE889A562E842C4600FB7AD1 /* Sources */,
 				CE889A572E842C4600FB7AD1 /* Frameworks */,
 				CE889A582E842C4600FB7AD1 /* Resources */,
+				CE048A0B2E842CF80099859B /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
