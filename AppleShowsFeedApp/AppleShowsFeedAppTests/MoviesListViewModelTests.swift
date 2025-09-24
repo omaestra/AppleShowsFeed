@@ -7,31 +7,7 @@
 
 import XCTest
 import AppleShowsFeed
-
-final class MoviesListViewModel {
-    var movies: [Movie]
-    
-    var isLoading = false
-    var error: Error?
-    
-    init(movies: [Movie]) {
-        self.movies = movies
-    }
-    
-    func didStartLoading() {
-        isLoading = true
-    }
-    
-    func didFinishLoading(with error: Error) {
-        self.error = error
-        self.isLoading = false
-    }
-    
-    func didFinishLoading(with movies: [Movie]) {
-        self.movies = movies
-        self.isLoading = false
-    }
-}
+@testable import AppleShowsFeedApp
 
 final class MoviesListViewModelTests: XCTestCase {
     func test_init_doesNotLoadMoviesOnInit() {
