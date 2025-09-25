@@ -67,7 +67,7 @@ final class RemoteMovieLoaderTests: XCTestCase {
         let url = URL(string: "http://any-url.com")!
         let (sut, client) = makeSUT(url: url)
         
-        let emptyListJSON = Data("{\"entry\": []}".utf8)
+        let emptyListJSON = Data("{\"feed\": { \"entry\": [] }}".utf8)
         let httpResponse = HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: nil)!
         
         client.didComplete(with: .success((emptyListJSON, httpResponse)))
@@ -90,7 +90,7 @@ final class RemoteMovieLoaderTests: XCTestCase {
         let movie2JSON = makeJSON(from: movie2)
         
         let itemsJSON = [
-            "entry": [movie1JSON, movie2JSON]
+            "feed": ["entry": [movie1JSON, movie2JSON]]
         ]
         let jsonData = try! JSONSerialization.data(withJSONObject: itemsJSON)
         let httpResponse = HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: nil)!

@@ -28,6 +28,16 @@ private struct Root<Resource>: Decodable where Resource: Decodable {
     let items: Resource
     
     private enum CodingKeys: String, CodingKey {
+        case feed
+    }
+    
+    private enum EntryCodingKeys: String, CodingKey {
         case items = "entry"
+    }
+    
+    init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let entriesContainer = try container.nestedContainer(keyedBy: EntryCodingKeys.self, forKey: .feed)
+        self.items = try entriesContainer.decode(Resource.self, forKey: EntryCodingKeys.items)
     }
 }
