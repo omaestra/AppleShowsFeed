@@ -5,10 +5,11 @@
 //  Created by Oswaldo Maestra on 25/09/2025.
 //
 
+import Foundation
 import SwiftUI
 
-public final class Router {
-    public var path = NavigationPath()
+public final class Router: ObservableObject {
+    @Published public var path = NavigationPath()
     
     public enum Destination {
         case movieDetails
