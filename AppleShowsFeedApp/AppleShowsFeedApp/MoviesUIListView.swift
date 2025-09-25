@@ -12,12 +12,24 @@ final class MoviesUIListView {
     static func composedWith(
         loader: MovieLoader
     ) -> some View {
-        let viewModel = MoviesListViewModel(movies: [])
+        let viewModel = MoviesListViewModel()
         viewModel.onRefresh = { [loader, weak viewModel] in
             do {
                 await viewModel?.didStartLoading()
                 let movies = try await loader.load()
-                await viewModel?.didFinishLoading(with: movies)
+                
+                let cellViewModels = movies.map {
+                    MovieCellViewModel(
+                        id: $0.id,
+                        imageURL: $0.images.last?.url,
+                        name: $0.name,
+                        category: $0.category,
+                        rentalPrice: $0.rentalPrice?.label,
+                        price: $0.price.label
+                    )
+                }
+                
+                await viewModel?.didFinishLoading(with: cellViewModels)
             } catch {
                 await viewModel?.didFinishLoading(with: error)
             }

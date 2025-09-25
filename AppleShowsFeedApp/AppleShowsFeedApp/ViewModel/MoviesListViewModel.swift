@@ -9,15 +9,11 @@ import Foundation
 import AppleShowsFeed
 
 final class MoviesListViewModel: ObservableObject {
-    @Published private(set) var movies: [Movie]
+    @Published private(set) var movies: [MovieCellViewModel] = []
     @Published private(set) var isLoading = false
     @Published private(set) var error: Error?
     
     public var onRefresh: (() async -> Void)?
-    
-    init(movies: [Movie]) {
-        self.movies = movies
-    }
     
     @MainActor
     func didStartLoading() {
@@ -31,7 +27,7 @@ final class MoviesListViewModel: ObservableObject {
     }
     
     @MainActor
-    func didFinishLoading(with movies: [Movie]) {
+    func didFinishLoading(with movies: [MovieCellViewModel]) {
         self.movies = movies
         self.isLoading = false
         self.error = nil
