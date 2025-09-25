@@ -61,10 +61,12 @@ struct MovieCellView: View {
                 Spacer()
 
                 VStack(alignment: .leading, spacing: 4) {
-                    HStack {
-                        Text("Rent for:")
-                            .fontWeight(.semibold)
-                        Text(movie.rentalPrice.label)
+                    if let rentalPrice = movie.rentalPrice?.label {
+                        HStack {
+                            Text("Rent for:")
+                                .fontWeight(.semibold)
+                            Text(rentalPrice)
+                        }
                     }
                     HStack {
                         Text("Buy for:")

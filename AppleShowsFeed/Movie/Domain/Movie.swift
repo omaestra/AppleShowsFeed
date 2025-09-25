@@ -105,7 +105,7 @@ public struct CategoryWrapper: Decodable {
 
 public struct ContentTypeWrapper: Decodable {
     struct ContentTypeAttributes: Decodable {
-        let label: FeedContentType
+        let term: FeedContentType
     }
     
     let attributes: ContentTypeAttributes
@@ -114,11 +114,11 @@ public struct ContentTypeWrapper: Decodable {
 public struct Movie: Equatable {
     public let id: String
     public let name: String
-    public let summary: String
+    public let summary: String?
     public let title: String
     public let releaseDate: Date
-    public let rights: String
-    public let rentalPrice: Price
+    public let rights: String?
+    public let rentalPrice: Price?
     public let price: Price
     public let artist: String
     public let category: String
@@ -129,11 +129,11 @@ public struct Movie: Equatable {
     public init(
         id: String,
         name: String,
-        summary: String,
+        summary: String?,
         title: String,
         releaseDate: Date,
-        rights: String,
-        rentalPrice: Price,
+        rights: String?,
+        rentalPrice: Price?,
         price: Price,
         artist: String,
         category: String,
@@ -191,8 +191,11 @@ extension Movie: Decodable {
         let nameContainer = try container.nestedContainer(keyedBy: LabelKeys.self, forKey: .name)
         self.name = try nameContainer.decode(String.self, forKey: .label)
         
-        let summaryContainer = try container.nestedContainer(keyedBy: LabelKeys.self, forKey: .summary)
-        self.summary = try summaryContainer.decode(String.self, forKey: .label)
+        if let summaryContainer = try? container.nestedContainer(keyedBy: LabelKeys.self, forKey: .summary) {
+            self.summary = try summaryContainer.decodeIfPresent(String.self, forKey: .label)
+        } else {
+            self.summary = nil
+        }
         
         let titleContainer = try container.nestedContainer(keyedBy: LabelKeys.self, forKey: .title)
         self.title = try titleContainer.decode(String.self, forKey: .label)
@@ -200,14 +203,20 @@ extension Movie: Decodable {
         let releaseDateContainer = try container.nestedContainer(keyedBy: LabelKeys.self, forKey: .releaseDate)
         self.releaseDate = try releaseDateContainer.decode(Date.self, forKey: .label)
         
-        let rightsContainer = try container.nestedContainer(keyedBy: LabelKeys.self, forKey: .rights)
-        self.rights = try rightsContainer.decode(String.self, forKey: .label)
+        let rightsContainer = try? container.nestedContainer(keyedBy: LabelKeys.self, forKey: .rights)
+        self.rights = try rightsContainer?.decodeIfPresent(String.self, forKey: .label)
         
         let priceWrapper = try container.decode(PriceWrapper.self, forKey: .price)
         self.price = Price(label: priceWrapper.label, amount: Double(priceWrapper.attributes.amount) ?? 0.0, currency: priceWrapper.attributes.currency)
         
-        let rentalPriceWrapper = try container.decode(PriceWrapper.self, forKey: .rentalPrice)
-        self.rentalPrice = Price(label: rentalPriceWrapper.label, amount: Double(rentalPriceWrapper.attributes.amount) ?? 0.0, currency: rentalPriceWrapper.attributes.currency)
+        self.rentalPrice = try container.decodeIfPresent(PriceWrapper.self, forKey: .rentalPrice)
+            .map { wrapper in
+                Price(
+                    label: wrapper.label,
+                    amount: Double(wrapper.attributes.amount) ?? 0.0,
+                    currency: wrapper.attributes.currency
+                )
+            }
         
         let artistContainer = try container.nestedContainer(keyedBy: LabelKeys.self, forKey: .artist)
         self.artist = try artistContainer.decode(String.self, forKey: .label)
@@ -216,7 +225,7 @@ extension Movie: Decodable {
         self.category = categoryWrapper.attributes.label
         
         let contentTypeWrapper = try container.decode(ContentTypeWrapper.self, forKey: .contentType)
-        self.contentType = contentTypeWrapper.attributes.label
+        self.contentType = contentTypeWrapper.attributes.term
         
         self.duration = 0
         

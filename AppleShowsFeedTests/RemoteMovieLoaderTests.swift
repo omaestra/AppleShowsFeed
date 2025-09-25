@@ -164,10 +164,10 @@ func makeJSON(from movie: Movie) -> [String: Any] {
         ],
         "rights": ["label": movie.rights],
         "im:rentalPrice": [
-            "label": movie.rentalPrice.label,
+            "label": movie.rentalPrice?.label ?? "12.99$",
             "attributes": [
-                "amount": String(movie.rentalPrice.amount),
-                "currency": movie.rentalPrice.currency
+                "amount": String(movie.rentalPrice?.amount ?? 0.0),
+                "currency": movie.rentalPrice?.currency
             ]
         ],
         "im:price": [
@@ -189,7 +189,8 @@ func makeJSON(from movie: Movie) -> [String: Any] {
         ],
         "im:contentType": [
             "attributes": [
-                "label": movie.contentType.rawValue
+                "label": movie.contentType.rawValue,
+                "term": movie.contentType.rawValue
             ]
         ],
         "im:image": movie.images.map {
