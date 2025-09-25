@@ -32,7 +32,11 @@ public class RemoteMovieLoader: MovieLoader {
         
         switch result {
         case let .success((data, response)):
-            return try mapper(data, response)
+            do {
+                return try mapper(data, response)
+            } catch {
+                throw Error.invalidData
+            }
             
         case .failure:
             throw Error.connectivity
