@@ -7,13 +7,13 @@
 
 import Foundation
 
-struct MovieDetailsViewModel {
-    let imageURL: URL?
-    let name: String
-    let category: String
-    let releaseDate: Date
-    let artist: String?
-    let price: String
-    let rentalPrice: String?
-    let summary: String?
+public struct MovieDetailsViewModel: Hashable {
+    public let imageURL: URL?
+    public let name: String
+    public let category: String
+    public let releaseDate: Date
+    public let artist: String?
+    public let price: String
+    public let rentalPrice: String?
+    public let summary: String?
 }

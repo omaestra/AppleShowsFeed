@@ -26,14 +26,24 @@ struct AppleShowsFeedApp: App {
             NavigationStack(path: $router.path) {
                 MoviesListUIComposer.composedWith(
                     loader: Self.remoteMovieLoader,
-                    onSelection: { [weak router] in
-                        router?.navigate(to: .movieDetails)
+                    onSelection: { [weak router] movie in
+                        let viewModel = MovieDetailsViewModel(
+                            imageURL: movie.images.last?.url,
+                            name: movie.name,
+                            category: movie.category,
+                            releaseDate: movie.releaseDate,
+                            artist: movie.artist,
+                            price: movie.price.label,
+                            rentalPrice: movie.rentalPrice?.label,
+                            summary: movie.summary
+                        )
+                        router?.navigate(to: .movieDetails(viewModel))
                     }
                 )
                 .navigationDestination(for: Router.Destination.self) { destination in
                     switch destination {
-                    case .movieDetails:
-                        Text("Movie Details View")
+                    case let .movieDetails(viewModel):
+                        MovieDetailsView(viewModel: viewModel)
                     }
                 }
             }
