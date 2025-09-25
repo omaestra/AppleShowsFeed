@@ -11,8 +11,8 @@ import SwiftUI
 public final class Router: ObservableObject {
     @Published public var path = NavigationPath()
     
-    public enum Destination {
-        case movieDetails
+    public enum Destination: Hashable {
+        case movieDetails(MovieDetailsViewModel)
     }
     
     public init() {}
