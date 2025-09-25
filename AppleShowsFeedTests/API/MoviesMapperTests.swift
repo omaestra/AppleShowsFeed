@@ -45,4 +45,27 @@ final class MoviesMapperTests: XCTestCase {
         
         XCTAssertEqual(result, [])
     }
+    
+    func test_map_deliversItemsOn200HTTPResponseWithJSONItems() throws {
+        let url = URL(string: "http://any-url.com")!
+        
+        let movie1 = makeMovie(
+            summary: "any summary",
+            rights: "any rights",
+            rentalPrice: Price(label: "12.99$", amount: 12.99, currency: "USD")
+        )
+        let movie1JSON = makeJSON(from: movie1)
+        let movie2 = makeMovie()
+        let movie2JSON = makeJSON(from: movie2)
+        
+        let itemsJSON = [
+            "feed": ["entry": [movie1JSON, movie2JSON]]
+        ]
+        let jsonData = try JSONSerialization.data(withJSONObject: itemsJSON)
+        let httpResponse = HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: nil)!
+        
+        let result = try MoviesMapper.map(jsonData, response: httpResponse)
+        
+        XCTAssertEqual(result, [movie1, movie2])
+    }
 }
