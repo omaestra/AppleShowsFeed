@@ -24,4 +24,13 @@ final class MoviesMapperTests: XCTestCase {
             )
         }
     }
+    
+    func test_map_throwsErrorOn200HTTPResponseWithInvalidJSON() {
+        let url = URL(string: "http://any-url.com")!
+        let invalidJSON = Data("invalid json".utf8)
+        
+        XCTAssertThrowsError(
+            try MoviesMapper.map(invalidJSON, response: HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: nil)!)
+        )
+    }
 }
