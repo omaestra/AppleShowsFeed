@@ -7,18 +7,7 @@
 
 import XCTest
 import SwiftUI
-
-class Router {
-    var path = NavigationPath()
-    
-    enum Destination {
-        case movieDetails
-    }
-    
-    func navigate(to destination: Destination) {
-        path.append(destination)
-    }
-}
+import AppleShowsFeed
 
 final class RouterTests: XCTestCase {
     func test_init_doesNotNavigateToDestination() {
@@ -33,6 +22,16 @@ final class RouterTests: XCTestCase {
         sut.navigate(to: .movieDetails)
         
         let expectedPath: [Router.Destination] = [.movieDetails]
+        XCTAssertEqual(sut.path, NavigationPath(expectedPath))
+    }
+    
+    func test_pop_removesLastDestination() {
+        let sut = Router()
+        
+        sut.navigate(to: .movieDetails)
+        sut.pop()
+        
+        let expectedPath: [Router.Destination] = []
         XCTAssertEqual(sut.path, NavigationPath(expectedPath))
     }
 }
