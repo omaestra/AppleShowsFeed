@@ -33,4 +33,16 @@ final class MoviesMapperTests: XCTestCase {
             try MoviesMapper.map(invalidJSON, response: HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: nil)!)
         )
     }
+    
+    func test_map_deliversNoItemsOn200HTTPResponseWithEmptyJSONList() throws {
+        let url = URL(string: "http://any-url.com")!
+        let itemsJSON = [
+            "feed": ["entry": []]
+        ]
+        let jsonData = try JSONSerialization.data(withJSONObject: itemsJSON)
+        
+        let result = try MoviesMapper.map(jsonData, response: HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: nil)!)
+        
+        XCTAssertEqual(result, [])
+    }
 }
