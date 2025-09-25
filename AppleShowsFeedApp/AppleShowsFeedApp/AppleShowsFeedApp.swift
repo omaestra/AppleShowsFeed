@@ -11,7 +11,7 @@ import SwiftUI
 struct AppleShowsFeedApp: App {
     var body: some Scene {
         WindowGroup {
-            MoviesListView()
+            MoviesListView(viewModel: MoviesListViewModel(movies: .mockData()))
         }
     }
 }
