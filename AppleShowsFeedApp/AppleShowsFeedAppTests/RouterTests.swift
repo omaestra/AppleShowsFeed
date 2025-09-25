@@ -7,7 +7,7 @@
 
 import XCTest
 import SwiftUI
-import AppleShowsFeed
+import AppleShowsFeedApp
 
 final class RouterTests: XCTestCase {
     func test_init_doesNotNavigateToDestination() {
