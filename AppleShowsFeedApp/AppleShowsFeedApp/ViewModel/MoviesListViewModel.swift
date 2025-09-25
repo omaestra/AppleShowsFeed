@@ -30,5 +30,6 @@ final class MoviesListViewModel: ObservableObject {
     func didFinishLoading(with movies: [Movie]) {
         self.movies = movies
         self.isLoading = false
+        self.error = nil
     }
 }

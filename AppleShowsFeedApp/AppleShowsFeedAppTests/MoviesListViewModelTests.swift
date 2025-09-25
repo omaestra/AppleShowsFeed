@@ -59,4 +59,17 @@ final class MoviesListViewModelTests: XCTestCase {
         
         XCTAssertFalse(sut.isLoading)
     }
+    
+    func test_didFinishLoadingWithMovies_clearCurrentErrorState() {
+        let sut = MoviesListViewModel(movies: [])
+        
+        sut.didStartLoading()
+        sut.didFinishLoading(with: NSError(domain: "any error", code: -1))
+        
+        XCTAssertNotNil(sut.error)
+        
+        sut.didFinishLoading(with: [])
+        
+        XCTAssertNil(sut.error)
+    }
 }
