@@ -10,7 +10,8 @@ import AppleShowsFeed
 
 final class MoviesListUIComposer {
     static func composedWith(
-        loader: MovieLoader
+        loader: MovieLoader,
+        onSelection: @escaping () -> Void
     ) -> some View {
         let viewModel = MoviesListViewModel()
         viewModel.onRefresh = { [loader, weak viewModel] in
@@ -19,7 +20,8 @@ final class MoviesListUIComposer {
                 let movies = try await loader.load()
                 
                 let cellViewModels = movies.map {
-                    MovieCellViewModel(
+                    
+                    let viewModel = MovieCellViewModel(
                         id: $0.id,
                         imageURL: $0.images.last?.url,
                         name: $0.name,
@@ -27,6 +29,10 @@ final class MoviesListUIComposer {
                         rentalPrice: $0.rentalPrice?.label,
                         price: $0.price.label
                     )
+                    
+                    viewModel.onSelection = onSelection
+                    
+                    return viewModel
                 }
                 
                 await viewModel?.didFinishLoading(with: cellViewModels)

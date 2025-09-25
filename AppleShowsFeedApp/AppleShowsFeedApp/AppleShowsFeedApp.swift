@@ -19,9 +19,24 @@ struct AppleShowsFeedApp: App {
         return RemoteMovieLoader(url: url, client: httpClient, mapper: MoviesMapper.map)
     }()
     
+    @StateObject var router = Router()
+    
     var body: some Scene {
         WindowGroup {
-            MoviesListUIComposer.composedWith(loader: Self.remoteMovieLoader)
+            NavigationStack(path: $router.path) {
+                MoviesListUIComposer.composedWith(
+                    loader: Self.remoteMovieLoader,
+                    onSelection: { [weak router] in
+                        router?.navigate(to: .movieDetails)
+                    }
+                )
+                .navigationDestination(for: Router.Destination.self) { destination in
+                    switch destination {
+                    case .movieDetails:
+                        Text("Movie Details View")
+                    }
+                }
+            }
         }
     }
 }

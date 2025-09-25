@@ -12,6 +12,8 @@ final class MovieCellViewModel: Equatable {
         lhs.id == rhs.id
     }
     
+    public var onSelection: (() -> Void)?
+    
     let id: String
     let imageURL: URL?
     let name: String
