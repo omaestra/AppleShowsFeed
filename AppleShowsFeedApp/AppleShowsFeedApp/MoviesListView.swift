@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  MoviesListView.swift
 //  AppleShowsFeedApp
 //
 //  Created by Oswaldo Maestra on 24/09/2025.
@@ -8,7 +8,7 @@
 import SwiftUI
 import AppleShowsFeed
 
-struct ContentView: View {
+struct MoviesListView: View {
     @State var movies: [Movie] = []
     
     var body: some View {
@@ -69,7 +69,7 @@ struct MovieCellView: View {
 }
 
 #Preview {
-    ContentView(movies: [
+    MoviesListView(movies: [
         Movie(id: "1", name: "The Fantastic Four: First Steps", summary: "some summary", title: "The Fantastic Four: First Steps - Matt Shakman", releaseDate: .now, rights: "some rights", rentalPrice: Price(label: "12.99$", amount: 21.99, currency: "USD"), price: Price(label: "21.99$", amount: 21.99, currency: "USD"), artist: "some artist", category: "Action & Adventure", contentType: .movie, duration: 60, images: [
             ImageItem(url: URL(string: "https://is1-ssl.mzstatic.com/image/thumb/Video221/v4/d7/36/81/d736811f-fbe7-285c-c02a-1d746fdb523b/DIS_FANTASTIC_FOUR_FIRST_STEPS_ITUNES_ARTWORK_WW_ARTWORK_EN_2000x3000_508B2600000BMW.lsr/113x170bb.png")!, attributes: .init(height: 20)),
         ]),
