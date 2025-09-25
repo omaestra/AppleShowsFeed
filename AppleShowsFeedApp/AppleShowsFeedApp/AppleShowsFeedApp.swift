@@ -21,7 +21,7 @@ struct AppleShowsFeedApp: App {
     
     var body: some Scene {
         WindowGroup {
-            MoviesUIListView.composedWith(loader: Self.remoteMovieLoader)
+            MoviesListUIComposer.composedWith(loader: Self.remoteMovieLoader)
         }
     }
 }

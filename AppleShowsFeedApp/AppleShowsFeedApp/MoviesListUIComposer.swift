@@ -1,5 +1,5 @@
 //
-//  MoviesUIListView.swift
+//  MoviesListUIComposer.swift
 //  AppleShowsFeedApp
 //
 //  Created by Oswaldo Maestra on 25/09/2025.
@@ -8,7 +8,7 @@
 import SwiftUI
 import AppleShowsFeed
 
-final class MoviesUIListView {
+final class MoviesListUIComposer {
     static func composedWith(
         loader: MovieLoader
     ) -> some View {
