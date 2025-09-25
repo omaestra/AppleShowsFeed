@@ -12,13 +12,13 @@ import AppleShowsFeed
 @MainActor
 final class MoviesListViewModelTests: XCTestCase {
     func test_init_doesNotLoadMoviesOnInit() {
-        let sut = MoviesListViewModel(movies: [])
+        let sut = MoviesListViewModel()
         
         XCTAssertEqual(sut.movies, [])
     }
     
     func test_didStartLoading_setsIsLoadingToTrue() {
-        let sut = MoviesListViewModel(movies: [])
+        let sut = MoviesListViewModel()
         
         sut.didStartLoading()
         
@@ -26,7 +26,7 @@ final class MoviesListViewModelTests: XCTestCase {
     }
     
     func test_didFinishLoading_deliversErrorOnLoadingError() {
-        let sut = MoviesListViewModel(movies: [])
+        let sut = MoviesListViewModel()
         
         sut.didFinishLoading(with: NSError(domain: "any error", code: -1))
         
@@ -34,7 +34,7 @@ final class MoviesListViewModelTests: XCTestCase {
     }
     
     func test_didFinishLoading_setsIsLoadingToFalse() {
-        let sut = MoviesListViewModel(movies: [])
+        let sut = MoviesListViewModel()
         
         sut.didStartLoading()
         sut.didFinishLoading(with: NSError(domain: "any error", code: -1))
@@ -43,7 +43,7 @@ final class MoviesListViewModelTests: XCTestCase {
     }
     
     func test_didFinishLoading_setsMoviesList() {
-        let sut = MoviesListViewModel(movies: [])
+        let sut = MoviesListViewModel()
         
         sut.didFinishLoading(with: [])
         
@@ -52,7 +52,7 @@ final class MoviesListViewModelTests: XCTestCase {
     }
     
     func test_didFinishLoadingWithMovies_setsIsLoadingStateToFalse() {
-        let sut = MoviesListViewModel(movies: [])
+        let sut = MoviesListViewModel()
         
         sut.didStartLoading()
         sut.didFinishLoading(with: [])
@@ -61,7 +61,7 @@ final class MoviesListViewModelTests: XCTestCase {
     }
     
     func test_didFinishLoadingWithMovies_clearCurrentErrorState() {
-        let sut = MoviesListViewModel(movies: [])
+        let sut = MoviesListViewModel()
         
         sut.didStartLoading()
         sut.didFinishLoading(with: NSError(domain: "any error", code: -1))

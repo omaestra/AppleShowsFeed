@@ -7,7 +7,11 @@
 
 import Foundation
 
-final class MovieCellViewModel {
+final class MovieCellViewModel: Equatable {
+    static func == (lhs: MovieCellViewModel, rhs: MovieCellViewModel) -> Bool {
+        lhs.id == rhs.id
+    }
+    
     let id: String
     let imageURL: URL?
     let name: String
