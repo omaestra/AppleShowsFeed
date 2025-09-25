@@ -7,6 +7,6 @@
 
 import Foundation
 
-protocol MovieLoader {
+public protocol MovieLoader {
     func load() async throws -> [Movie]
 }
