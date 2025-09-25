@@ -84,7 +84,11 @@ final class RemoteMovieLoaderTests: XCTestCase {
         let url = URL(string: "http://any-url.com")!
         let (sut, client) = makeSUT(url: url)
         
-        let movie1 = makeMovie()
+        let movie1 = makeMovie(
+            summary: "any summary",
+            rights: "any rights",
+            rentalPrice: Price(label: "12.99$", amount: 12.99, currency: "USD")
+        )
         let movie1JSON = makeJSON(from: movie1)
         let movie2 = makeMovie()
         let movie2JSON = makeJSON(from: movie2)
@@ -116,19 +120,20 @@ final class RemoteMovieLoaderTests: XCTestCase {
     }
 }
 
-func makeMovie(id: UUID = UUID()) -> Movie {
+func makeMovie(
+    id: UUID = UUID(),
+    summary: String? = nil,
+    rights: String? = nil,
+    rentalPrice: Price? = nil
+) -> Movie {
     Movie(
         id: id.uuidString,
         name: "any name",
-        summary: "any summary",
+        summary: summary,
         title: "any title",
         releaseDate: .distantPast,
-        rights: "any rights",
-        rentalPrice: Price(
-            label: "12.99$",
-            amount: 12.99,
-            currency: "USD"
-        ),
+        rights: rights,
+        rentalPrice: rentalPrice,
         price: Price(
             label: "21.99$",
             amount: 21.99,
@@ -148,7 +153,7 @@ func makeMovie(id: UUID = UUID()) -> Movie {
 }
 
 func makeJSON(from movie: Movie) -> [String: Any] {
-    return [
+    var json: [String: Any] = [
         "id": [
             "label": movie.id,
             "attributes": [
@@ -156,19 +161,10 @@ func makeJSON(from movie: Movie) -> [String: Any] {
             ]
         ],
         "im:name": ["label": movie.name],
-        "summary": ["label": movie.summary],
         "title": ["label": movie.title],
         "im:releaseDate": [
             "label": movie.releaseDate.ISO8601Format(),
             "attributes": ["label": "July 25, 2025"]
-        ],
-        "rights": ["label": movie.rights],
-        "im:rentalPrice": [
-            "label": movie.rentalPrice?.label ?? "12.99$",
-            "attributes": [
-                "amount": String(movie.rentalPrice?.amount ?? 0.0),
-                "currency": movie.rentalPrice?.currency
-            ]
         ],
         "im:price": [
             "label": movie.price.label,
@@ -202,4 +198,22 @@ func makeJSON(from movie: Movie) -> [String: Any] {
             ]
         }
     ]
+    
+    if let summary = movie.summary {
+        json["summary"] = ["label": summary]
+    }
+    if let rights = movie.rights {
+        json["rights"] = ["label": rights]
+    }
+    if let rentalPrice = movie.rentalPrice {
+        json["im:rentalPrice"] = [
+            "label": rentalPrice.label,
+            "attributes": [
+                "amount": String(rentalPrice.amount),
+                "currency": rentalPrice.currency
+            ]
+        ]
+    }
+    
+    return json
 }
