@@ -7,18 +7,18 @@
 
 import Foundation
 
-final class URLSessionHTTPClient: HTTPClient {
-    enum Error: Swift.Error {
+public final class URLSessionHTTPClient: HTTPClient {
+    public enum Error: Swift.Error {
         case invalidHTTPResponse
     }
     
-    let session: URLSession
+    public let session: URLSession
     
-    init(session: URLSession) {
+    public init(session: URLSession) {
         self.session = session
     }
     
-    func get(from url: URL) async -> HTTPClient.Result {
+    public func get(from url: URL) async -> HTTPClient.Result {
         do {
             let (data, response) = try await session.data(from: url)
             
