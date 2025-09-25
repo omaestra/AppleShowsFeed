@@ -16,6 +16,19 @@ struct MoviesListView: View {
             MovieCellView(movie: movie)
         }
         .listStyle(.plain)
+        .overlay {
+            if viewModel.isLoading {
+                ProgressView()
+            } else if let error = viewModel.error {
+                VStack(spacing: 16) {
+                    Image(systemName: "exclamationmark.triangle")
+                        .font(.system(size: 48))
+                    Text(error.localizedDescription)
+                }
+                .foregroundStyle(.secondary)
+                .padding()
+            }
+        }
     }
 }
 
@@ -68,8 +81,30 @@ struct MovieCellView: View {
     }
 }
 
-#Preview {
-    MoviesListView(viewModel: MoviesListViewModel(movies: .mockData()))
+#Preview("Happy path") {
+    let viewModel = MoviesListViewModel(movies: [])
+    viewModel.didStartLoading()
+    viewModel.didFinishLoading(with: .mockData())
+    
+    return MoviesListView(viewModel: viewModel)
+}
+
+#Preview("Error state") {
+    let viewModel = MoviesListViewModel(movies: [])
+    viewModel.didStartLoading()
+    viewModel.didFinishLoading(with: NSError(domain: "Oops", code: -1))
+    
+    return MoviesListView(viewModel: viewModel)
+        .refreshable {
+            viewModel.didFinishLoading(with: .mockData())
+        }
+}
+
+#Preview("Loading state") {
+    let viewModel = MoviesListViewModel(movies: [])
+    viewModel.didStartLoading()
+    
+    return MoviesListView(viewModel: viewModel)
 }
 
 extension Array where Element == Movie {
