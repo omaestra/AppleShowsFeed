@@ -8,8 +8,8 @@
 import Foundation
 import SwiftUI
 
-public final class Router: ObservableObject {
-    @Published public var path = NavigationPath()
+public struct Router {
+    public var path = NavigationPath()
     
     public enum Destination: Hashable {
         case movieDetails(MovieDetailsViewModel)
@@ -17,11 +17,11 @@ public final class Router: ObservableObject {
     
     public init() {}
     
-    public func navigate(to destination: Destination) {
+    public mutating func navigate(to destination: Destination) {
         path.append(destination)
     }
     
-    public func pop() {
+    public mutating func pop() {
         path.removeLast()
     }
 }

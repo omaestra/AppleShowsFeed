@@ -22,5 +22,8 @@ final class MoviesListUIComposer {
             .refreshable {
                 await viewModel.loadMovies()
             }
+            .onDisappear {
+                viewModel.cancel()
+            }
     }
 }

@@ -17,7 +17,7 @@ final class RouterTests: XCTestCase {
     }
     
     func test_navigate_navigatesToGivenDestination() {
-        let sut = Router()
+        var sut = Router()
         let viewModel = MovieDetailsViewModel(
             imageURL: nil,
             name: "any name",
@@ -36,7 +36,7 @@ final class RouterTests: XCTestCase {
     }
     
     func test_pop_removesLastDestination() {
-        let sut = Router()
+        var sut = Router()
         let viewModel = MovieDetailsViewModel(
             imageURL: nil,
             name: "any name",

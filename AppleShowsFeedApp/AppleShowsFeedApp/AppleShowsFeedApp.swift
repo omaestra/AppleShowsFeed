@@ -12,6 +12,7 @@ import AppleShowsFeed
 struct AppleShowsFeedApp: App {
     @State private var selectedCountry: Country = .canada
     @State private var id: UUID = UUID()
+    @State private var router = Router()
     
     private static let httpClient: HTTPClient = {
         URLSessionHTTPClient(session: URLSession.shared)
@@ -22,14 +23,12 @@ struct AppleShowsFeedApp: App {
         return RemoteMovieLoader(url: url, client: Self.httpClient, mapper: MoviesMapper.map)
     }
     
-    @StateObject var router = Router()
-    
     var body: some Scene {
         WindowGroup {
             NavigationStack(path: $router.path) {
                 MoviesListUIComposer.composedWith(
                     loader: makeLoader(for: selectedCountry.id),
-                    onSelection: { [weak router] movie in
+                    onSelection: { movie in
                         let viewModel = MovieDetailsViewModel(
                             imageURL: movie.images.last?.url,
                             name: movie.name,
@@ -40,7 +39,8 @@ struct AppleShowsFeedApp: App {
                             rentalPrice: movie.rentalPrice?.label,
                             summary: movie.summary
                         )
-                        router?.navigate(to: .movieDetails(viewModel))
+                        
+                        router.navigate(to: .movieDetails(viewModel))
                     }
                 )
                 .id(id)
