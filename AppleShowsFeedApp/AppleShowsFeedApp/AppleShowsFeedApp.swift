@@ -8,19 +8,6 @@
 import SwiftUI
 import AppleShowsFeed
 
-enum Country: String, CaseIterable, Identifiable {
-    case canada = "ca"
-    case spain = "es"
-    
-    var id: String { rawValue }
-    var displayName: String {
-        switch self {
-        case .canada: return "🇨🇦 Canada"
-        case .spain: return "🇪🇸 Spain"
-        }
-    }
-}
-
 @main
 struct AppleShowsFeedApp: App {
     @State private var selectedCountry: Country = .canada
