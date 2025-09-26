@@ -14,7 +14,9 @@ final class MoviesListViewModel: ObservableObject {
     @Published private(set) var error: Error?
     
     private let loader: MovieLoader
-    private var onSelection: (Movie) -> Void
+    var onSelection: (Movie) -> Void
+    
+    var refreshTask: Task<Void, Error>?
     
     enum MoviesListError: LocalizedError, Equatable {
         case invalidData
@@ -39,21 +41,41 @@ final class MoviesListViewModel: ObservableObject {
     }
     
     func loadMovies() async {
-        do {
-            await didStartLoading()
+        refreshTask?.cancel()
+        
+        refreshTask = Task {
+            defer { refreshTask = nil }
             
-            let movies = try await loader.load()
-            if movies.isEmpty {
-                throw MoviesListError.emptyResults
+            do {
+                await didStartLoading()
+                
+                try Task.checkCancellation()
+                let movies = try await loader.load()
+                try Task.checkCancellation()
+                
+                if movies.isEmpty {
+                    throw MoviesListError.emptyResults
+                }
+                
+                let cellViewModels = mapMoviesToCellViewModels(movies: movies)
+                await didFinishLoading(with: cellViewModels)
+            } catch is CancellationError {
+                await MainActor.run { [weak self] in
+                    self?.isLoading = false
+                }
+            } catch let error as MoviesListError {
+                await didFinishLoading(with: error)
+            } catch {
+                await didFinishLoading(with: MoviesListError.invalidData)
             }
-            
-            let cellViewModels = mapMoviesToCellViewModels(movies: movies)
-            await didFinishLoading(with: cellViewModels)
-        } catch let error as MoviesListError {
-            await didFinishLoading(with: error)
-        } catch {
-            await didFinishLoading(with: MoviesListError.invalidData)
         }
+        
+        try? await refreshTask?.value
+    }
+    
+    func cancel() {
+        refreshTask?.cancel()
+        refreshTask = nil
     }
     
     private func mapMoviesToCellViewModels(movies: [Movie]) -> [MovieCellViewModel] {
