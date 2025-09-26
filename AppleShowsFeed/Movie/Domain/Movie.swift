@@ -123,7 +123,6 @@ public struct Movie: Equatable {
     public let artist: String
     public let category: String
     public let contentType: FeedContentType
-    public let duration: Double
     public let images: [ImageItem]
     
     public init(
@@ -138,7 +137,6 @@ public struct Movie: Equatable {
         artist: String,
         category: String,
         contentType: FeedContentType,
-        duration: Double,
         images: [ImageItem]
     ) {
         self.id = id
@@ -152,7 +150,6 @@ public struct Movie: Equatable {
         self.artist = artist
         self.category = category
         self.contentType = contentType
-        self.duration = duration
         self.images = images
     }
     
@@ -174,7 +171,6 @@ extension Movie: Decodable {
         case artist = "im:artist"
         case category
         case contentType = "im:contentType"
-        case duration = "im:duration"
         case images = "im:image"
         
     }
@@ -226,8 +222,6 @@ extension Movie: Decodable {
         
         let contentTypeWrapper = try container.decode(ContentTypeWrapper.self, forKey: .contentType)
         self.contentType = contentTypeWrapper.attributes.term
-        
-        self.duration = 0
         
         self.images = try container.decode([ImageItem].self, forKey: .images)
     }

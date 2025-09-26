@@ -213,7 +213,6 @@ func makeMovie(
         artist: "any artist",
         category: "any category",
         contentType: .movie,
-        duration: 12345,
         images: [
             ImageItem(
                 url: URL(string: "http://some-url.com")!,

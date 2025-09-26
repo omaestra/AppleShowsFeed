@@ -98,7 +98,7 @@ struct MovieCellView: View {
     final class MockMoviesLoader: MovieLoader {
         func load() async throws -> [Movie] {
             [
-                Movie(id: "id", name: "any name", summary: "any summary", title: "any title", releaseDate: .now, rights: "any rights", rentalPrice: nil, price: Price(label: "12.99$", amount: 12.99, currency: "USD"), artist: "any artist", category: "any category", contentType: .movie, duration: 60, images: [])
+                Movie(id: "id", name: "any name", summary: "any summary", title: "any title", releaseDate: .now, rights: "any rights", rentalPrice: nil, price: Price(label: "12.99$", amount: 12.99, currency: "USD"), artist: "any artist", category: "any category", contentType: .movie, images: [])
             ]
         }
     }
