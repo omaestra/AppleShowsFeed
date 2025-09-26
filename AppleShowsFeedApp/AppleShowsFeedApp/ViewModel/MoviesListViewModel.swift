@@ -11,7 +11,7 @@ import AppleShowsFeed
 final class MoviesListViewModel: ObservableObject {
     @Published private(set) var movies: [MovieCellViewModel] = []
     @Published private(set) var isLoading = false
-    @Published private(set) var error: Error?
+    @Published private(set) var error: MoviesListError?
     
     private let loader: MovieLoader
     var onSelection: (Movie) -> Void
@@ -66,7 +66,7 @@ final class MoviesListViewModel: ObservableObject {
             } catch let error as MoviesListError {
                 await didFinishLoading(with: error)
             } catch {
-                await didFinishLoading(with: MoviesListError.invalidData)
+                await didFinishLoading(with: .invalidData)
             }
         }
         
@@ -103,7 +103,7 @@ final class MoviesListViewModel: ObservableObject {
     }
     
     @MainActor
-    private func didFinishLoading(with error: Error) {
+    private func didFinishLoading(with error: MoviesListError) {
         self.error = error
         self.isLoading = false
     }
