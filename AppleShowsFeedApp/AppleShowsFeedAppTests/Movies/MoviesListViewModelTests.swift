@@ -30,6 +30,16 @@ final class MoviesListViewModelTests: XCTestCase {
         XCTAssertEqual(sut.error as? MoviesListViewModel.MoviesListError, .invalidData)
     }
     
+    func test_loadMovies_deliversEmptyErrorOnEmptyLoaderResults() async {
+        let (sut, _) = makeSUT(
+            with: .success([])
+        )
+        
+        await sut.loadMovies()
+        
+        XCTAssertEqual(sut.error as? MoviesListViewModel.MoviesListError, .emptyResults)
+    }
+    
     func test_loadMovies_deliversMoviesOnLoaderSuccess() async {
         let expectedMovies = [makeMovie()]
         
