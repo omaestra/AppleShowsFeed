@@ -54,6 +54,7 @@ struct MovieCellView: View {
                     .foregroundStyle(.secondary)
             }
             .frame(width: 100, height: 150)
+            .background(Color.secondary.opacity(0.3))
             .clipShape(RoundedRectangle(cornerRadius: 12))
 
             VStack(alignment: .leading, spacing: 8) {
@@ -91,29 +92,54 @@ struct MovieCellView: View {
 }
 
 #Preview("Happy path") {
-    let viewModel = MoviesListViewModel()
-    viewModel.didStartLoading()
-    viewModel.didFinishLoading(with: .mockData())
+    final class MockMoviesLoader: MovieLoader {
+        func load() async throws -> [Movie] {
+            [
+                Movie(id: "id", name: "any name", summary: "any summary", title: "any title", releaseDate: .now, rights: "any rights", rentalPrice: nil, price: Price(label: "12.99$", amount: 12.99, currency: "USD"), artist: "any artist", category: "any category", contentType: .movie, duration: 60, images: [])
+            ]
+        }
+    }
+    
+    let loader = MockMoviesLoader()
+    let viewModel = MoviesListViewModel(loader: loader, onSelection: { _ in })
     
     return MoviesListView(viewModel: viewModel)
+        .task {
+            await viewModel.loadMovies()
+        }
 }
 
 #Preview("Error state") {
-    let viewModel = MoviesListViewModel()
-    viewModel.didStartLoading()
-    viewModel.didFinishLoading(with: NSError(domain: "Oops", code: -1))
+    final class AlwaysFailingMoviesLoader: MovieLoader {
+        func load() async throws -> [Movie] {
+            throw NSError(domain: "any error", code: -1)
+        }
+    }
+    
+    let loader = AlwaysFailingMoviesLoader()
+    let viewModel = MoviesListViewModel(loader: loader, onSelection: { _ in })
     
     return MoviesListView(viewModel: viewModel)
-        .refreshable {
-            viewModel.didFinishLoading(with: .mockData())
+        .task {
+            await viewModel.loadMovies()
         }
 }
 
 #Preview("Loading state") {
-    let viewModel = MoviesListViewModel()
-    viewModel.didStartLoading()
+    final class AlwaysLoadingLoader: MovieLoader {
+        func load() async throws -> [Movie] {
+            try await Task.sleep(for: .seconds(4))
+            return []
+        }
+    }
+    
+    let loader = AlwaysLoadingLoader()
+    let viewModel = MoviesListViewModel(loader: loader, onSelection: { _ in })
     
     return MoviesListView(viewModel: viewModel)
+        .task {
+            await viewModel.loadMovies()
+        }
 }
 
 extension Array where Element == MovieCellViewModel {

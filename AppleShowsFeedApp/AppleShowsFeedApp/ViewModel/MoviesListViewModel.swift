@@ -13,21 +13,62 @@ final class MoviesListViewModel: ObservableObject {
     @Published private(set) var isLoading = false
     @Published private(set) var error: Error?
     
-    public var onRefresh: (() async -> Void)?
+    private let loader: MovieLoader
+    private var onSelection: (Movie) -> Void
+    
+    init(
+        loader: MovieLoader,
+        onSelection: @escaping (Movie) -> Void
+    ) {
+        self.loader = loader
+        self.onSelection = onSelection
+    }
+    
+    func loadMovies() async {
+        do {
+            await didStartLoading()
+            
+            let movies = try await loader.load()
+            let cellViewModels = mapMoviesToCellViewModels(movies: movies)
+            
+            await didFinishLoading(with: cellViewModels)
+        } catch {
+            await didFinishLoading(with: error)
+        }
+    }
+    
+    private func mapMoviesToCellViewModels(movies: [Movie]) -> [MovieCellViewModel] {
+        return movies.map { movie in
+            let viewModel = MovieCellViewModel(
+                id: movie.id,
+                imageURL: movie.images.last?.url,
+                name: movie.name,
+                category: movie.category,
+                rentalPrice: movie.rentalPrice?.label,
+                price: movie.price.label
+            )
+            
+            viewModel.onSelection = { [onSelection] in
+                onSelection(movie)
+            }
+            
+            return viewModel
+        }
+    }
     
     @MainActor
-    func didStartLoading() {
+    private func didStartLoading() {
         isLoading = true
     }
     
     @MainActor
-    func didFinishLoading(with error: Error) {
+    private func didFinishLoading(with error: Error) {
         self.error = error
         self.isLoading = false
     }
     
     @MainActor
-    func didFinishLoading(with movies: [MovieCellViewModel]) {
+    private func didFinishLoading(with movies: [MovieCellViewModel]) {
         self.movies = movies
         self.isLoading = false
         self.error = nil

@@ -12,64 +12,132 @@ import AppleShowsFeed
 @MainActor
 final class MoviesListViewModelTests: XCTestCase {
     func test_init_doesNotLoadMoviesOnInit() {
-        let sut = MoviesListViewModel()
+        let (sut, _) = makeSUT()
         
         XCTAssertEqual(sut.movies, [])
-    }
-    
-    func test_didStartLoading_setsIsLoadingToTrue() {
-        let sut = MoviesListViewModel()
-        
-        sut.didStartLoading()
-        
-        XCTAssertEqual(sut.isLoading, true)
-    }
-    
-    func test_didFinishLoading_deliversErrorOnLoadingError() {
-        let sut = MoviesListViewModel()
-        
-        sut.didFinishLoading(with: NSError(domain: "any error", code: -1))
-        
-        XCTAssertNotNil(sut.error)
-    }
-    
-    func test_didFinishLoading_setsIsLoadingToFalse() {
-        let sut = MoviesListViewModel()
-        
-        sut.didStartLoading()
-        sut.didFinishLoading(with: NSError(domain: "any error", code: -1))
-        
+        XCTAssertNil(sut.error)
         XCTAssertFalse(sut.isLoading)
     }
     
-    func test_didFinishLoading_setsMoviesList() {
-        let sut = MoviesListViewModel()
+    func test_loadMovies_deliversErrorOnLoaderError() async {
+        let expectedError = NSError(domain: "any error", code: -1)
+        let (sut, _) = makeSUT(
+            with: .failure(expectedError)
+        )
         
-        sut.didFinishLoading(with: [])
+        await sut.loadMovies()
         
-        XCTAssertNil(sut.error)
-        XCTAssertEqual(sut.movies, [])
+        XCTAssertEqual(sut.error as? NSError, expectedError)
     }
     
-    func test_didFinishLoadingWithMovies_setsIsLoadingStateToFalse() {
-        let sut = MoviesListViewModel()
+    func test_loadMovies_deliversMoviesOnLoaderSuccess() async {
+        let expectedMovies = [makeMovie()]
         
-        sut.didStartLoading()
-        sut.didFinishLoading(with: [])
+        let (sut, _) = makeSUT(
+            with: .success(expectedMovies)
+        )
         
-        XCTAssertFalse(sut.isLoading)
-    }
-    
-    func test_didFinishLoadingWithMovies_clearCurrentErrorState() {
-        let sut = MoviesListViewModel()
-        
-        sut.didStartLoading()
-        sut.didFinishLoading(with: NSError(domain: "any error", code: -1))
-        
-        XCTAssertNotNil(sut.error)
-        
-        sut.didFinishLoading(with: [])
+        await sut.loadMovies()
         
         XCTAssertNil(sut.error)
+        XCTAssertEqual(sut.movies.map(\.id), expectedMovies.map(\.id))
     }
+    
+    func test_loadMovies_mapsMovieToCellViewModel() async {
+        let movie = makeMovie(
+            id: "123",
+            name: "any movie"
+        )
+        
+        let (sut, _) = makeSUT(with: .success([movie]))
+        
+        await sut.loadMovies()
+        
+        let cell = sut.movies.first!
+        XCTAssertEqual(cell.id, "123")
+        XCTAssertEqual(cell.name, "any movie")
+    }
+    
+    func test_onSelection_callsOnSelectionWithMovie() async {
+        let movie = makeMovie(id: "123", name: "any movie")
+        var receivedMovie: Movie?
+        
+        let (sut, _) = makeSUT(with: .success([movie]), onSelection: {
+            receivedMovie = $0
+        })
+        
+        await sut.loadMovies()
+        sut.movies.first?.onSelection?()
+        
+        XCTAssertEqual(receivedMovie?.id, "123")
+        XCTAssertEqual(receivedMovie?.name, "any movie")
+    }
+    
+    private func makeSUT(
+        with result: Result<[Movie], Error> = .failure(NSError(domain: "any error", code: -1)),
+        onSelection: @escaping ((Movie) -> Void) = { _ in }
+    ) -> (MoviesListViewModel, MoviesLoaderStub) {
+        let loader = MoviesLoaderStub(result: result)
+        let sut = MoviesListViewModel(loader: loader, onSelection: onSelection)
+        
+        return (sut, loader)
+    }
+}
+
+final class LoaderSpy: MovieLoader {
+    private let loadHandler: () async throws -> [Movie]
+    
+    init(loadHandler: @escaping () async throws -> [Movie]) {
+        self.loadHandler = loadHandler
+    }
+    
+    func load() async throws -> [Movie] {
+        try await loadHandler()
+    }
+}
+
+final class MoviesLoaderStub: MovieLoader {
+    private let result: Result<[Movie], Error>
+        
+    init(result: Result<[Movie], Error>) {
+        self.result = result
+    }
+    
+    func load() async throws -> [Movie] {
+        try result.get()
+    }
+}
+
+func makeMovie(
+    id: String = UUID().uuidString,
+    name: String = "any name"
+) -> Movie {
+    Movie(
+        id: id,
+        name: name,
+        summary: "any summary",
+        title: "any title",
+        releaseDate: .distantPast,
+        rights: "any rights",
+        rentalPrice: Price(
+            label: "12.99$",
+            amount: 12.99,
+            currency: "USD"
+        ),
+        price: Price(
+            label: "21.99$",
+            amount: 21.99,
+            currency: "USD"
+        ),
+        artist: "any artist",
+        category: "any category",
+        contentType: .movie,
+        duration: 12345,
+        images: [
+            ImageItem(
+                url: URL(string: "http://some-url.com")!,
+                attributes: .init(height: 60)
+            )
+        ]
+    )
 }
