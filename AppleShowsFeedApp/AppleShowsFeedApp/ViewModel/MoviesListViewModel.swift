@@ -16,6 +16,17 @@ final class MoviesListViewModel: ObservableObject {
     private let loader: MovieLoader
     private var onSelection: (Movie) -> Void
     
+    enum MoviesListError: LocalizedError, Equatable {
+        case invalidData
+
+        var errorDescription: String? {
+            switch self {
+            case .invalidData:
+                return "We couldn’t load the movies. Please try again later."
+            }
+        }
+    }
+    
     init(
         loader: MovieLoader,
         onSelection: @escaping (Movie) -> Void
@@ -30,10 +41,9 @@ final class MoviesListViewModel: ObservableObject {
             
             let movies = try await loader.load()
             let cellViewModels = mapMoviesToCellViewModels(movies: movies)
-            
             await didFinishLoading(with: cellViewModels)
         } catch {
-            await didFinishLoading(with: error)
+            await didFinishLoading(with: MoviesListError.invalidData)
         }
     }
     

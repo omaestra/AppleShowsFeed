@@ -19,7 +19,7 @@ final class MoviesListViewModelTests: XCTestCase {
         XCTAssertFalse(sut.isLoading)
     }
     
-    func test_loadMovies_deliversErrorOnLoaderError() async {
+    func test_loadMovies_deliversInvalidDataErrorOnLoaderError() async {
         let expectedError = NSError(domain: "any error", code: -1)
         let (sut, _) = makeSUT(
             with: .failure(expectedError)
@@ -27,7 +27,7 @@ final class MoviesListViewModelTests: XCTestCase {
         
         await sut.loadMovies()
         
-        XCTAssertEqual(sut.error as? NSError, expectedError)
+        XCTAssertEqual(sut.error as? MoviesListViewModel.MoviesListError, .invalidData)
     }
     
     func test_loadMovies_deliversMoviesOnLoaderSuccess() async {
