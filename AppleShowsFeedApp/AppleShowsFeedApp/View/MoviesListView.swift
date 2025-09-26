@@ -9,11 +9,18 @@ import SwiftUI
 import AppleShowsFeed
 
 struct MoviesListView: View {
-    @ObservedObject var viewModel: MoviesListViewModel
+    @StateObject var viewModel: MoviesListViewModel
+    
+    init(viewModel: MoviesListViewModel) {
+        self._viewModel = StateObject(wrappedValue: viewModel)
+    }
     
     var body: some View {
         List(viewModel.movies, id: \.id) { movie in
             MovieCellView(viewModel: movie)
+                .onTapGesture {
+                    movie.onSelection?()
+                }
         }
         .listStyle(.plain)
         .overlay {
