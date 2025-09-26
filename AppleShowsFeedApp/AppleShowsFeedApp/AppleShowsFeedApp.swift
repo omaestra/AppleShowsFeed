@@ -10,14 +10,17 @@ import AppleShowsFeed
 
 @main
 struct AppleShowsFeedApp: App {
+    @State private var countryCode: String = "ca"
+    @State private var id: UUID = UUID()
+    
     private static let httpClient: HTTPClient = {
         URLSessionHTTPClient(session: URLSession.shared)
     }()
     
-    private static let remoteMovieLoader: RemoteMovieLoader = {
-        let url = URL(string: "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topMovies/limit=2/json?cc=ca")!
-        return RemoteMovieLoader(url: url, client: httpClient, mapper: MoviesMapper.map)
-    }()
+    private func makeLoader(for countryCode: String) -> MovieLoader {
+        let url = URL(string: "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topMovies/limit=100/json?cc=\(countryCode)")!
+        return RemoteMovieLoader(url: url, client: Self.httpClient, mapper: MoviesMapper.map)
+    }
     
     @StateObject var router = Router()
     
@@ -25,7 +28,7 @@ struct AppleShowsFeedApp: App {
         WindowGroup {
             NavigationStack(path: $router.path) {
                 MoviesListUIComposer.composedWith(
-                    loader: Self.remoteMovieLoader,
+                    loader: makeLoader(for: countryCode),
                     onSelection: { [weak router] movie in
                         let viewModel = MovieDetailsViewModel(
                             imageURL: movie.images.last?.url,
@@ -40,6 +43,15 @@ struct AppleShowsFeedApp: App {
                         router?.navigate(to: .movieDetails(viewModel))
                     }
                 )
+                .id(id)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        LanguagePicker(countryCode: $countryCode)
+                    }
+                }
+                .onChange(of: countryCode, { oldValue, newValue in
+                    id = UUID()
+                })
                 .navigationDestination(for: Router.Destination.self) { destination in
                     switch destination {
                     case let .movieDetails(viewModel):
