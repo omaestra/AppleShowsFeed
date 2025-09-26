@@ -28,6 +28,7 @@ final class MoviesListViewModelTests: XCTestCase {
         await sut.loadMovies()
         
         XCTAssertEqual(sut.error as? MoviesListViewModel.MoviesListError, .invalidData)
+        XCTAssertEqual(sut.error?.localizedDescription, "We couldn’t load the movies. Please try again later.")
     }
     
     func test_loadMovies_deliversEmptyErrorOnEmptyLoaderResults() async {
@@ -38,6 +39,7 @@ final class MoviesListViewModelTests: XCTestCase {
         await sut.loadMovies()
         
         XCTAssertEqual(sut.error as? MoviesListViewModel.MoviesListError, .emptyResults)
+        XCTAssertEqual(sut.error?.localizedDescription, "No movies found :(")
     }
     
     func test_loadMovies_deliversMoviesOnLoaderSuccess() async {
