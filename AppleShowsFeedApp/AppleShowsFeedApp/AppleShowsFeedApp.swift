@@ -11,7 +11,6 @@ import AppleShowsFeed
 @main
 struct AppleShowsFeedApp: App {
     @State private var selectedCountry: Country = .canada
-    @State private var id: UUID = UUID()
     @State private var router = Router()
     
     private static let httpClient: HTTPClient = {
@@ -43,15 +42,12 @@ struct AppleShowsFeedApp: App {
                         router.navigate(to: .movieDetails(viewModel))
                     }
                 )
-                .id(id)
+                .id(selectedCountry.id)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
                         LanguagePicker(selectedCountry: $selectedCountry)
                     }
                 }
-                .onChange(of: selectedCountry, { oldValue, newValue in
-                    id = UUID()
-                })
                 .navigationDestination(for: Router.Destination.self) { destination in
                     switch destination {
                     case let .movieDetails(viewModel):
