@@ -21,12 +21,15 @@ struct MoviesListView: View {
                 .onTapGesture {
                     movie.onSelection?()
                 }
+                .redacted(reason: viewModel.isLoading ? .placeholder : [])
+                .disabled(viewModel.isLoading)
         }
         .listStyle(.plain)
         .overlay {
-            if viewModel.isLoading {
-                ProgressView()
-            } else if let error = viewModel.error {
+            if viewModel.isLoading, viewModel.movies.isEmpty {
+                ProgressView("Loading awesome movies...")
+            }
+            if let error = viewModel.error {
                 VStack(spacing: 16) {
                     Image(systemName: "exclamationmark.triangle")
                         .font(.system(size: 48))
