@@ -8,17 +8,18 @@
 import SwiftUI
 
 struct LanguagePicker: View {
-    @Binding var countryCode: String
+    @Binding var selectedCountry: Country
 
     var body: some View {
-        Picker("Language", selection: $countryCode) {
-            Text("🇨🇦 Canada").tag("ca")
-            Text("🇪🇸 Spain").tag("es")
+        Picker("Country", selection: $selectedCountry) {
+            ForEach(Country.allCases) { country in
+                Text(country.displayName).tag(country)
+            }
         }
         .pickerStyle(.menu)
     }
 }
 
 #Preview {
-    LanguagePicker(countryCode: .constant("es"))
+    LanguagePicker(selectedCountry: .constant(.canada))
 }

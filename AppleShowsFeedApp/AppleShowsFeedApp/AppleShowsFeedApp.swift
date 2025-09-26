@@ -8,9 +8,22 @@
 import SwiftUI
 import AppleShowsFeed
 
+enum Country: String, CaseIterable, Identifiable {
+    case canada = "ca"
+    case spain = "es"
+    
+    var id: String { rawValue }
+    var displayName: String {
+        switch self {
+        case .canada: return "🇨🇦 Canada"
+        case .spain: return "🇪🇸 Spain"
+        }
+    }
+}
+
 @main
 struct AppleShowsFeedApp: App {
-    @State private var countryCode: String = "ca"
+    @State private var selectedCountry: Country = .canada
     @State private var id: UUID = UUID()
     
     private static let httpClient: HTTPClient = {
@@ -28,7 +41,7 @@ struct AppleShowsFeedApp: App {
         WindowGroup {
             NavigationStack(path: $router.path) {
                 MoviesListUIComposer.composedWith(
-                    loader: makeLoader(for: countryCode),
+                    loader: makeLoader(for: selectedCountry.id),
                     onSelection: { [weak router] movie in
                         let viewModel = MovieDetailsViewModel(
                             imageURL: movie.images.last?.url,
@@ -46,10 +59,10 @@ struct AppleShowsFeedApp: App {
                 .id(id)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
-                        LanguagePicker(countryCode: $countryCode)
+                        LanguagePicker(selectedCountry: $selectedCountry)
                     }
                 }
-                .onChange(of: countryCode, { oldValue, newValue in
+                .onChange(of: selectedCountry, { oldValue, newValue in
                     id = UUID()
                 })
                 .navigationDestination(for: Router.Destination.self) { destination in
