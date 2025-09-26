@@ -10,6 +10,7 @@ import AppleShowsFeed
 
 struct MoviesListView: View {
     @StateObject var viewModel: MoviesListViewModel
+    @State private var hasLoadedOnce = false
     
     init(viewModel: MoviesListViewModel) {
         self._viewModel = StateObject(wrappedValue: viewModel)
@@ -38,6 +39,17 @@ struct MoviesListView: View {
                 .foregroundStyle(.secondary)
                 .padding()
             }
+        }
+        .task {
+            guard !hasLoadedOnce else { return }
+            await viewModel.loadMovies()
+            hasLoadedOnce = true
+        }
+        .refreshable {
+            await viewModel.loadMovies()
+        }
+        .onDisappear {
+            viewModel.cancel()
         }
     }
 }

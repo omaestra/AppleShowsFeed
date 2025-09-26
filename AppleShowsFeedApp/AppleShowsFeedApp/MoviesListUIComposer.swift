@@ -16,14 +16,5 @@ final class MoviesListUIComposer {
         let viewModel = MoviesListViewModel(loader: loader, onSelection: onSelection)
         
         return MoviesListView(viewModel: viewModel)
-            .task {
-                await viewModel.loadMovies()
-            }
-            .refreshable {
-                await viewModel.loadMovies()
-            }
-            .onDisappear {
-                viewModel.cancel()
-            }
     }
 }
