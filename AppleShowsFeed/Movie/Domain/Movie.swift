@@ -7,10 +7,18 @@
 
 import Foundation
 
+/// Make use of JSON-specific `Decodable` protocol to provide compile-time type safety.
+/// iTunes API wraps values in "label" objects for multi-language support. (e.g. {"im:name": {"label": "Movie Title"}})
+/// The mapper intention is to abstract this complexity from domain models.
+
 public enum FeedContentType: String, Decodable {
     case movie = "Movie"
 }
 
+// MARK: - Image Support
+
+/// Represents movie artwork with size information
+/// iTunes provides multiple sizes: 60, 170 heights
 public struct ImageItem: Decodable {
     public struct ImageAttributes: Decodable {
         public let height: Int?
@@ -47,6 +55,9 @@ public struct ImageItem: Decodable {
     }
 }
 
+// MARK: - Price Information
+
+/// Wrapper for iTunes API price structure with currency
 public struct PriceWrapper: Decodable {
     public struct PriceAttributes: Decodable {
         let amount: String
@@ -73,6 +84,9 @@ public struct Price {
     }
 }
 
+// MARK: - Metadata Wrappers
+
+/// Handles iTunes API's ID structure: {"attributes": {"im:id": "12345"}}
 public struct IDWrapper: Decodable {
     struct IDAttributes: Decodable {
         let id: String
@@ -95,6 +109,7 @@ public struct IDWrapper: Decodable {
     }
 }
 
+/// Handles iTunes category structure with label wrapper
 public struct CategoryWrapper: Decodable {
     struct CategoryAttributes: Decodable {
         let label: String
@@ -103,6 +118,7 @@ public struct CategoryWrapper: Decodable {
     let attributes: CategoryAttributes
 }
 
+/// Handles content type classification from iTunes API
 public struct ContentTypeWrapper: Decodable {
     struct ContentTypeAttributes: Decodable {
         let term: FeedContentType
@@ -110,6 +126,8 @@ public struct ContentTypeWrapper: Decodable {
     
     let attributes: ContentTypeAttributes
 }
+
+// MARK: - Main Model
 
 public struct Movie: Equatable {
     public let id: String
@@ -158,6 +176,8 @@ public struct Movie: Equatable {
     }
 }
 
+// MARK: - JSON Decoding
+
 extension Movie: Decodable {
     private enum CodingKeys: String, CodingKey {
         case id
@@ -172,7 +192,6 @@ extension Movie: Decodable {
         case category
         case contentType = "im:contentType"
         case images = "im:image"
-        
     }
     
     private enum LabelKeys: String, CodingKey {
