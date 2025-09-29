@@ -7,6 +7,10 @@
 
 import Foundation
 
+/// **DECISION RECORD**: JSON chosen over XML for iTunes API integration
+/// - iTunes API supports JSON by default (no format negotiation needed).
+/// - JSONDecoder provides compile-time type safety vs runtime XML parsing.
+/// - Abstracted behind `MovieMapper` protocol for format swap capability
 public class MoviesMapper {
     public static func map(_ data: Data, response: HTTPURLResponse) throws -> [Movie] {
         guard response.statusCode == 200 else {
