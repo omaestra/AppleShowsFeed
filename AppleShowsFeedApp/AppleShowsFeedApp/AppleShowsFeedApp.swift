@@ -10,6 +10,7 @@ import AppleShowsFeed
 
 @main
 struct AppleShowsFeedApp: App {
+    /// Hardcoded country value to simply display different feeds by country.
     @State private var selectedCountry: Country = .canada
     @State private var router = Router()
     

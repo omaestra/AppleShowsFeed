@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// Hardcoded country values only for simply display different feeds by country.
 enum Country: String, CaseIterable, Identifiable {
     case canada = "ca"
     case spain = "es"
