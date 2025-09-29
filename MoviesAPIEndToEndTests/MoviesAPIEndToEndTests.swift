@@ -6,30 +6,28 @@
 //
 
 import XCTest
+import AppleShowsFeed
 
 final class MoviesAPIEndToEndTests: XCTestCase {
-
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
-    }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        measure {
-            // Put the code you want to measure the time of here.
+    func test_endToEndTestServerGETMoviesResult_mapsCorrectlyWithDomainModelStructure() async {
+        let url = URL(string: "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topMovies/limit=2/json?cc=ca")!
+        let httpClient = URLSessionHTTPClient(session: URLSession(configuration: .ephemeral))
+        
+        let result = await httpClient.get(from: url)
+        let mappedResult = result.flatMap { (data, response) in
+            do {
+                return .success(try MoviesMapper.map(data, response: response))
+            } catch {
+                return .failure(error)
+            }
+        }
+        
+        switch mappedResult {
+        case let .success(movies):
+            XCTAssertEqual(movies.count, 2)
+            
+        case let .failure(error):
+            XCTFail("Expected successful movies feed result, got \(error) instead")
         }
     }
-
 }
