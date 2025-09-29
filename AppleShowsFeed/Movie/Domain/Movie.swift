@@ -59,12 +59,12 @@ public struct PriceWrapper: Decodable {
 
 public struct Price {
     public let label: String
-    public let amount: Double
+    public let amount: Double?
     public let currency: String
     
     public init(
         label: String,
-        amount: Double,
+        amount: Double?,
         currency: String
     ) {
         self.label = label
@@ -203,13 +203,13 @@ extension Movie: Decodable {
         self.rights = try rightsContainer?.decodeIfPresent(String.self, forKey: .label)
         
         let priceWrapper = try container.decode(PriceWrapper.self, forKey: .price)
-        self.price = Price(label: priceWrapper.label, amount: Double(priceWrapper.attributes.amount) ?? 0.0, currency: priceWrapper.attributes.currency)
+        self.price = Price(label: priceWrapper.label, amount: Double(priceWrapper.attributes.amount), currency: priceWrapper.attributes.currency)
         
         self.rentalPrice = try container.decodeIfPresent(PriceWrapper.self, forKey: .rentalPrice)
             .map { wrapper in
                 Price(
                     label: wrapper.label,
-                    amount: Double(wrapper.attributes.amount) ?? 0.0,
+                    amount: Double(wrapper.attributes.amount),
                     currency: wrapper.attributes.currency
                 )
             }
