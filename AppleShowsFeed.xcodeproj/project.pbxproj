@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		CE1BDEA42E8AEDE50004F70D /* AppleShowsFeed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE9DEC582E82C06F007869DD /* AppleShowsFeed.framework */; platformFilter = ios; };
+		CE1BDEA42E8AEDE50004F70D /* AppleShowsFeed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE9DEC582E82C06F007869DD /* AppleShowsFeed.framework */; };
 		CE9DEC642E82C070007869DD /* AppleShowsFeed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE9DEC582E82C06F007869DD /* AppleShowsFeed.framework */; };
 /* End PBXBuildFile section */
 
@@ -274,7 +274,6 @@
 /* Begin PBXTargetDependency section */
 		CE1BDEA62E8AEDE50004F70D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			platformFilter = ios;
 			target = CE9DEC572E82C06F007869DD /* AppleShowsFeed */;
 			targetProxy = CE1BDEA52E8AEDE50004F70D /* PBXContainerItemProxy */;
 		};
@@ -296,10 +295,15 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.omaestra.MoviesAPIEndToEndTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
 				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -313,10 +317,15 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.omaestra.MoviesAPIEndToEndTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
 				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
