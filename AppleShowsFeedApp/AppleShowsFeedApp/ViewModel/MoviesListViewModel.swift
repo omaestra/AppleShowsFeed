@@ -100,6 +100,7 @@ final class MoviesListViewModel: ObservableObject {
     
     @MainActor
     private func didStartLoading() {
+        error = nil
         isLoading = true
     }
     
