@@ -27,7 +27,7 @@ final class MoviesListViewModelTests: XCTestCase {
         
         await sut.loadMovies()
         
-        XCTAssertEqual(sut.error as? MoviesListViewModel.MoviesListError, .invalidData)
+        XCTAssertEqual(sut.error, .invalidData)
         XCTAssertEqual(sut.error?.localizedDescription, "We couldn’t load the movies. Please try again later.")
     }
     
@@ -38,7 +38,7 @@ final class MoviesListViewModelTests: XCTestCase {
         
         await sut.loadMovies()
         
-        XCTAssertEqual(sut.error as? MoviesListViewModel.MoviesListError, .emptyResults)
+        XCTAssertEqual(sut.error, .emptyResults)
         XCTAssertEqual(sut.error?.localizedDescription, "No movies found :(")
     }
     
