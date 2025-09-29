@@ -89,7 +89,8 @@ final class MoviesListViewModel: ObservableObject {
                 price: movie.price.label
             )
             
-            viewModel.onSelection = { [onSelection] in
+            viewModel.onSelection = { [weak self, onSelection] in
+                guard let _ = self else { return }
                 onSelection(movie)
             }
             
