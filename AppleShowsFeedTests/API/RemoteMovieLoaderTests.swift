@@ -20,7 +20,7 @@ final class RemoteMovieLoaderTests: XCTestCase {
     func test_load_deliversErrorOnClientError() async {
         let (sut, client) = makeSUT()
         
-        client.didComplete(with: NSError(domain: "any error", code: -1))
+        client.didComplete(with: anyNSError())
         
         do {
             _ = try await sut.load()
@@ -31,12 +31,11 @@ final class RemoteMovieLoaderTests: XCTestCase {
     }
     
     func test_load_deliversErrorOnMapperError() async {
-        let url = URL(string: "http://any-url.com")!
-        let httpResponse = HTTPURLResponse(url: url, statusCode: 400, httpVersion: nil, headerFields: nil)!
+        let httpResponse = HTTPURLResponse(statusCode: 400)
         let data = Data()
         
         let (sut, client) = makeSUT(mapper: { _, _ in
-            throw NSError(domain: "any error", code: -1)
+            throw anyNSError()
         })
         
         client.didComplete(with: .success((data, httpResponse)))
@@ -49,7 +48,7 @@ final class RemoteMovieLoaderTests: XCTestCase {
     }
     
     func test_load_deliversMappedResource() async {
-        let url = URL(string: "http://any-url.com")!
+        let url = anyURL()
         let movie1 = makeMovie(
             summary: "any summary",
             rights: "any rights",
@@ -61,7 +60,7 @@ final class RemoteMovieLoaderTests: XCTestCase {
             return [movie1, movie2]
         }
         
-        let valid200Response = (Data(), HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: nil)!)
+        let valid200Response = (Data(), HTTPURLResponse(statusCode: 200))
         client.didComplete(with: .success(valid200Response))
         
         do {
@@ -73,8 +72,8 @@ final class RemoteMovieLoaderTests: XCTestCase {
     }
     
     private func makeSUT(
-        url: URL = URL(string: "http://any-url.com")!,
-        with result: HTTPClient.Result = .failure(NSError(domain: "any error", code: -1)),
+        url: URL = anyURL(),
+        with result: HTTPClient.Result = .failure(anyNSError()),
         mapper: @escaping (Data, HTTPURLResponse) throws -> [Movie] = MoviesMapper.map
     ) -> (RemoteMovieLoader, HTTPClientSpy) {
         let client = HTTPClientSpy()

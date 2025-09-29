@@ -15,7 +15,7 @@ class HTTPClientSpy: HTTPClient {
     
     func get(from url: URL) async -> HTTPClient.Result {
         self.requestedURL = url
-        return result ?? .failure(NSError(domain: "any error", code: -1))
+        return result ?? .failure(anyNSError())
     }
     
     func didComplete(with result: HTTPClient.Result) {
