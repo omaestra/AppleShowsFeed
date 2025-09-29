@@ -18,9 +18,9 @@ public class MoviesMapper {
         }
         
         do {
-            let jsonDecoder = JSONDecoder()
-            jsonDecoder.dateDecodingStrategy = .iso8601
-            let movies = try jsonDecoder.decode(Root<[Movie]>.self, from: data)
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .iso8601
+            let movies = try decoder.decode(Root<[Movie]>.self, from: data)
             return movies.items
         } catch {
             throw RemoteMovieLoader.Error.invalidData
