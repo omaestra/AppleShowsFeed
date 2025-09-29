@@ -11,6 +11,7 @@ import Foundation
 /// - iTunes API supports JSON by default (no format negotiation needed).
 /// - JSONDecoder provides compile-time type safety vs runtime XML parsing.
 /// - Abstracted behind `MovieMapper` protocol for format swap capability
+/// - Use ISO8601 date decoding since it is iTunes API standard.
 public class MoviesMapper {
     public static func map(_ data: Data, response: HTTPURLResponse) throws -> [Movie] {
         guard response.statusCode == 200 else {
