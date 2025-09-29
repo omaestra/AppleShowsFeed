@@ -30,6 +30,8 @@ AppleShowsFeed/           # macOS framework to keep Business Logic isolated and 
     └── Router.swift      # Navigation management
 ```
 
+![screenshot](architecture.png)
+
 ### Prerequisites
 
 - Xcode 16.4+
