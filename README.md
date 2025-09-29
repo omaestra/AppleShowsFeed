@@ -1,6 +1,6 @@
 # ``AppleShowsFeed``
 
-A native iOS application showcasing top movies from the iTunes Store RSS feed, built with SwiftUI and modern iOS development practices.
+A native iOS application displaying top movies from the iTunes Store RSS feed, built with SwiftUI and modern iOS development practices.
 
 ## 🎯 Overview
 
@@ -8,29 +8,26 @@ Apple Shows Feed is a SwiftUI-based iOS application that displays trending movie
 
 ### 🏗️ Architecture
 
-Basic clean architecture featuring SOLID principles. Showcasing separation of concerns and dependency injection.
+Basic clean architecture featuring SOLID principles. Ensuring the system is modular, testable and easy to extend.
 MVVM design pattern for SwiftUI, defining clear separation between views and business logic.
 
-```
-AppleShowsFeed/           # macOS framework to keep Business Logic isolated and testing fast.
-├── Movie/
-│   ├── Domain/           # Business logic & entities
-│   │   ├── Movie.swift   # Core movie model
-│   │   └── MovieLoader.swift # Business interface
-│   └── API/              # External interfaces
-│       ├── HTTPClient.swift # Network abstraction
-│       ├── URLSessionHTTPClient.swift # URLSession network implementation
-│       ├── RemoteMovieLoader.swift # Remote Data fetching
-│       └── MoviesMapper.swift # JSON mapping
-│
-└── AppleShowsFeedApp/    # iOS Application project.
-    ├── Domain/           # App-specific business rules
-    ├── View/             # SwiftUI views
-    ├── ViewModel/        # Presentation logic
-    └── Router.swift      # Navigation management
-```
-
 ![screenshot](architecture.png)
+
+### Project structure and schemes
+
+This project is organized into multiple Xcode schemes to separate concerns and optimize both development speed and future CI/CD reliability.
+
+#### 1. AppleShowsFeed (macOS Framework):
+- Encapsulates all business logic and core domain models so unit tests run fast and isolated from UI concerns.
+    
+#### 2. AppleShowsFeedApp (iOS Application):
+- Provides the UI layer and composition for the iOS app.
+    
+#### 3. CI_iOS (Aggregated TestPlan):
+- Runs all test targets from both `AppleShowsFeed` and `AppleShowsFeedApp`. Used in CI/CD pipelines to ensure the entire system (business + UI) is verified.
+    
+#### 4. MoviesAPIEndToEndTests (Testing target):
+- Performs end-to-end integration tests against the real Apple RSS API. Runs manually or on demand — not on every CI/CD build to avoid hitting external services unnecessarily.
 
 ### Prerequisites
 
@@ -50,7 +47,7 @@ AppleShowsFeed/           # macOS framework to keep Business Logic isolated and 
 - [ ] Movie preview video player.
 - [ ] Display links and navigation to iTunes store.
 - [ ] Implement top TV Seasons.
-- [ ] Implement top TV series.
+- [ ] Implement top TV Series.
 
 ### Technical improvements
 - [ ] Local cache integration: Local data persistence.
@@ -66,6 +63,4 @@ This project serves as a portfolio piece, but suggestions and improvements are w
 
 Created by Oswaldo Maestra
 Last Updated: September 2025
-Swift Version: 5.0
-iOS Deployment Target: 15.0+
 
