@@ -1,0 +1,31 @@
+{
+  "configurations" : [
+    {
+      "id" : "E57DEDFF-6B97-495F-B13C-6E75EC3D4645",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:AppleShowsFeedApp\/AppleShowsFeedApp.xcodeproj",
+        "identifier" : "CE889A662E842C4800FB7AD1",
+        "name" : "AppleShowsFeedAppTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:AppleShowsFeed.xcodeproj",
+        "identifier" : "CE9DEC622E82C070007869DD",
+        "name" : "AppleShowsFeedTests"
+      }
+    }
+  ],
+  "version" : 1
+}
