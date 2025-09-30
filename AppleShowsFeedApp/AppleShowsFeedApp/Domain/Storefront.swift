@@ -8,12 +8,12 @@
 import Foundation
 
 /// Hardcoded country values only for simply display different feeds by country.
-enum Storefront: String, CaseIterable, Identifiable {
+public enum Storefront: String, CaseIterable, Identifiable {
     case canada = "ca"
     case spain = "es"
     
-    var id: String { rawValue }
-    var displayName: String {
+    public var id: String { rawValue }
+    public var displayName: String {
         switch self {
         case .canada: return "🇨🇦 Canada"
         case .spain: return "🇪🇸 Spain"
