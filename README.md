@@ -9,7 +9,7 @@ SwiftUI iOS client for the iTunes Store `topMovies` RSS feed `https://ax.itunes.
 - Used the `JSON` RSS feed version instead of `XML`, since it integrates seamlessly with Swift’s `Decodable` protocol making it simpler and faster to parse. Also, providing type safety by default.
     - **Note:** However, I abstracted parsing into `MoviesMapper`, so if `XML` parsing is required in the future, we can introduce a `XMLMovieMapper` and inject it into `RemoteMovieLoader` without changing higher layers. Ensuring separation of concerns and extension.
 - Modular Xcode schemes and testing targets.
-- ⚠️ Demo-only country picker – hard-coded flags and two markets (CA / ES).
+- Localization support matching Apple's Store-front requirement. Allows the user to select a StoreFront (CA, ES) to load content from and getting a default `Locale` (en_CA, es_ES) for the given store.
 
 ### 🏗️ Architecture
 
@@ -51,7 +51,7 @@ This project is organized into multiple Xcode schemes to separate concerns and o
 
 ### Technical improvements
 - [ ] Local cache + image persistence.
-- [ ] Localization
+- [x] Localization
 - [ ] Offline mode & reachability handling.
 - [ ] CI/CD pipeline.
 
