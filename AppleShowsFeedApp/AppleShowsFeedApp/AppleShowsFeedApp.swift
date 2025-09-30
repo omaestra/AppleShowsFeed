@@ -8,27 +8,36 @@
 import SwiftUI
 import AppleShowsFeed
 
+final class AppComposer {
+    private lazy var httpClient: HTTPClient = {
+        URLSessionHTTPClient(session: URLSession.shared)
+    }()
+    
+    func makeMoviesLoader(for countryCode: String) -> MovieLoader {
+        /// Apple provides JSON RSS feed structure, better for reducing boilerplate and integration with Swift's `Decodable` protocol.
+        let url = URL(string: "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topMovies/limit=100/json?cc=\(countryCode)")!
+        return RemoteMovieLoader(url: url, client: httpClient, mapper: MoviesMapper.map)
+    }
+    
+    convenience init(httpClient: HTTPClient) {
+        self.init()
+        self.httpClient = httpClient
+    }
+}
+
 @main
 struct AppleShowsFeedApp: App {
     /// Hardcoded country value to simply display different feeds by country.
     @State private var selectedStore: Storefront = .canada
     @State private var router = Router()
     
-    private static let httpClient: HTTPClient = {
-        URLSessionHTTPClient(session: URLSession.shared)
-    }()
-    
-    private func makeLoader(for countryCode: String) -> MovieLoader {
-        /// Apple provides JSON RSS feed structure, better for reducing boilerplate and integration with Swift's `Decodable` protocol.
-        let url = URL(string: "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topMovies/limit=100/json?cc=\(countryCode)")!
-        return RemoteMovieLoader(url: url, client: Self.httpClient, mapper: MoviesMapper.map)
-    }
+    private let appComposer = AppComposer()
     
     var body: some Scene {
         WindowGroup {
             NavigationStack(path: $router.path) {
                 MoviesListUIComposer.composedWith(
-                    loader: makeLoader(for: selectedStore.id),
+                    loader: appComposer.makeMoviesLoader(for: selectedStore.id),
                     onSelection: { movie in
                         let viewModel = MovieDetailsViewModel(
                             imageURL: movie.images.last?.url,
