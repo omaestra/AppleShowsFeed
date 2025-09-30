@@ -20,7 +20,7 @@ struct AppleShowsFeedApp: App {
         WindowGroup {
             NavigationStack(path: $router.path) {
                 MoviesListUIComposer.composedWith(
-                    loader: appComposer.makeMoviesLoader(for: .canada),
+                    loader: appComposer.makeMoviesLoader(for: selectedStore),
                     onSelection: { movie in
                         let viewModel = MovieDetailsViewModel(
                             imageURL: movie.images.last?.url,
