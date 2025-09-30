@@ -35,9 +35,12 @@ struct MovieDetailsView: View {
                         
                         Spacer()
                         
-                        Text.init("**Released:** \(viewModel.releaseDate.formatted(date: .long, time: .omitted))")
+                        Text("released.label").fontWeight(.semibold)
+                        + Text(" \(viewModel.releaseDateFormatted)")
+                        
                         if let artist = viewModel.artist {
-                            Text.init("**By:** \(artist)")
+                            Text("artist.label").fontWeight(.semibold)
+                            + Text(verbatim: " \(artist)")
                         }
                     }
                     
@@ -46,9 +49,9 @@ struct MovieDetailsView: View {
                 
                 Grid(alignment: .center) {
                     GridRow {
-                        Text("Buy")
+                        Text("price.buy.label")
                             .fontWeight(.semibold)
-                        Text("Rent")
+                        Text("price.rent.label")
                             .fontWeight(.semibold)
                     }
                     Spacer()
@@ -66,20 +69,36 @@ struct MovieDetailsView: View {
                                 .foregroundStyle(.white)
                                 .clipShape(RoundedRectangle(cornerRadius: 8))
                         } else {
-                            Text("-")
+                            Text(verbatim: "-")
                         }
                     }
                 }
                 
                 if let summary = viewModel.summary {
                     VStack(alignment: .leading, spacing: 24) {
-                        Text("Summary:")
+                        Text("movie.summary")
                             .font(.title2)
                             .fontWeight(.semibold)
-                        Text(summary)
+                        Text(verbatim: summary)
                             .lineSpacing(4)
                             .foregroundStyle(.secondary)
+                            .frame(maxWidth: .infinity, alignment: .leading)
                     }
+                } else {
+                    VStack(spacing: 16) {
+                        Image(systemName: "binoculars")
+                            .font(.system(size: 48))
+                        
+                        VStack(spacing: 8) {
+                            Text("error.no.summary.label")
+                                .fontWeight(.semibold)
+                            Text("error.no.summary.description")
+                                .font(.footnote)
+                        }
+                    }
+                    .frame(maxWidth: .infinity)
+                    .foregroundStyle(.secondary)
+                    .padding()
                 }
             }
             .padding()
