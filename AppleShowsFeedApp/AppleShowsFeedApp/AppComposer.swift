@@ -13,9 +13,16 @@ final class AppComposer {
         URLSessionHTTPClient(session: URLSession.shared)
     }()
     
-    func makeMoviesLoader(for countryCode: String) -> MovieLoader {
+    private lazy var baseURL = URL(string: "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS")!
+    
+    func makeMoviesLoader(for storeFront: Storefront = .canada) -> MovieLoader {
         /// Apple provides JSON RSS feed structure, better for reducing boilerplate and integration with Swift's `Decodable` protocol.
-        let url = URL(string: "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topMovies/limit=100/json?cc=\(countryCode)")!
+        let url = baseURL
+            .appending(path: "/topMovies/json")
+            .appending(queryItems: [
+            URLQueryItem(name: "cc", value: storeFront.id)
+        ])
+        
         return RemoteMovieLoader(url: url, client: httpClient, mapper: MoviesMapper.map)
     }
     
