@@ -12,8 +12,8 @@ struct LanguagePicker: View {
 
     var body: some View {
         Picker("storefront.title", selection: $selectedStore) {
-            ForEach(Storefront.allCases) { country in
-                Text(country.displayName).tag(country)
+            ForEach(Storefront.allCases) { store in
+                Text(store.displayName).tag(store)
             }
         }
         .pickerStyle(.menu)
