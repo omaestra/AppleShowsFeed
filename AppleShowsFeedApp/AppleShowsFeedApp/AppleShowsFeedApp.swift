@@ -57,6 +57,7 @@ struct AppleShowsFeedApp: App {
                     }
                 }
             }
+            .environment(\.locale, selectedStore.locale)
         }
     }
 }
