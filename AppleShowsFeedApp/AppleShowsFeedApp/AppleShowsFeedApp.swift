@@ -45,7 +45,7 @@ struct AppleShowsFeedApp: App {
                 .navigationDestination(for: Router.Destination.self) { destination in
                     switch destination {
                     case let .movieDetails(viewModel):
-                        MovieDetailsView(viewModel: viewModel)
+                        MovieDetailsUIComposer.composedWith(viewModel: viewModel)
                     }
                 }
             }
