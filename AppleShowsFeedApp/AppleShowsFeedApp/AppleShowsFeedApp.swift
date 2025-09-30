@@ -47,7 +47,7 @@ struct AppleShowsFeedApp: App {
                 .id(selectedStore.id)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
-                        LanguagePicker(selectedCountry: $selectedStore)
+                        LanguagePicker(selectedStore: $selectedStore)
                     }
                 }
                 .navigationDestination(for: Router.Destination.self) { destination in

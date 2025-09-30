@@ -8,10 +8,10 @@
 import SwiftUI
 
 struct LanguagePicker: View {
-    @Binding var selectedCountry: Storefront
+    @Binding var selectedStore: Storefront
 
     var body: some View {
-        Picker("storefront.title", selection: $selectedCountry) {
+        Picker("storefront.title", selection: $selectedStore) {
             ForEach(Storefront.allCases) { country in
                 Text(country.displayName).tag(country)
             }
@@ -21,5 +21,5 @@ struct LanguagePicker: View {
 }
 
 #Preview {
-    LanguagePicker(selectedCountry: .constant(.canada))
+    LanguagePicker(selectedStore: .constant(.canada))
 }
