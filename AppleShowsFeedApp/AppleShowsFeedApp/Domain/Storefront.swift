@@ -15,8 +15,8 @@ public enum Storefront: String, CaseIterable, Identifiable {
     public var id: String { rawValue }
     public var displayName: String {
         switch self {
-        case .canada: return "🇨🇦 Canada"
-        case .spain: return "🇪🇸 Spain"
+        case .canada: return "🇨🇦 Canada Store"
+        case .spain: return "🇪🇸 Spain Store"
         }
     }
 }
