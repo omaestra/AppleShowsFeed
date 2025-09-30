@@ -28,7 +28,7 @@ struct MoviesListView: View {
         .listStyle(.plain)
         .overlay {
             if viewModel.isLoading, viewModel.movies.isEmpty {
-                ProgressView("Loading awesome movies...")
+                ProgressView("movies.state.loading.label")
             }
             if let error = viewModel.error {
                 VStack(spacing: 16) {
@@ -86,13 +86,13 @@ struct MovieCellView: View {
                 VStack(alignment: .leading, spacing: 4) {
                     if let rentalPrice = viewModel.rentalPrice {
                         HStack {
-                            Text("Rent for:")
+                            Text("rentFor.label")
                                 .fontWeight(.semibold)
                             Text(rentalPrice)
                         }
                     }
                     HStack {
-                        Text("Buy for:")
+                        Text("buyFor.label")
                             .fontWeight(.semibold)
                         Text(viewModel.price)
                     }
