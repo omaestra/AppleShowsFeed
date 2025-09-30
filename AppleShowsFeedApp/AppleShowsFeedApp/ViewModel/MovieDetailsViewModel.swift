@@ -17,10 +17,6 @@ public struct MovieDetailsViewModel: Hashable {
     public let rentalPrice: String?
     public let summary: String?
     
-    public var releaseDateFormatted: String {
-        releaseDate.formatted(date: .numeric, time: .omitted)
-    }
-    
     public init(
         imageURL: URL?, 
         name: String, 

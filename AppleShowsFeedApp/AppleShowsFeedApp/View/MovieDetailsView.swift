@@ -36,7 +36,7 @@ struct MovieDetailsView: View {
                         Spacer()
                         
                         Text("released.label").fontWeight(.semibold)
-                        + Text(verbatim: " \(viewModel.releaseDateFormatted)")
+                        + Text(verbatim: " \(viewModel.releaseDate.formatted(date: .numeric, time: .omitted))")
                         
                         if let artist = viewModel.artist {
                             Text("artist.label").fontWeight(.semibold)
