@@ -85,27 +85,25 @@ final class MoviesListViewModelTests: XCTestCase {
         XCTAssertEqual(receivedMovie?.name, "any movie")
     }
     
-    func test_loadMovies_cancellationErrorUpdatesLoadingState() async {
+    func test_loadMovies_cancellationErrorUpdatesLoadingState() async throws {
         let loader = MockMovieLoader {
-            try await Task.sleep(for: .seconds(1))
             throw CancellationError()
         }
         let sut = MoviesListViewModel(loader: loader, onSelection: { _ in })
-        
-        let refreshTask = Task {
-            await sut.loadMovies()
-        }
-        
-        // Give time to refreshTask to start
-        try? await Task.sleep(for: .milliseconds(100))
-        
-        XCTAssertTrue(sut.isLoading, "isLoading should be true during load")
-        
-        sut.onSelection(makeMovie())
-        
-        await refreshTask.value
-        
-        XCTAssertEqual(sut.isLoading, false)
+
+        var observedStates: [Bool] = []
+        let cancellable = sut.$isLoading
+            .sink { observedStates.append($0) }
+
+        await sut.loadMovies()
+
+        cancellable.cancel()
+
+        XCTAssertEqual(
+            observedStates,
+            [false, true, false], // initial, loading, finished
+            "isLoading should start as false, then true while loading, and finally false after cancellation"
+        )
     }
     
     func test_loadMovies_cancellationPreventsStateUpdate() async throws {
