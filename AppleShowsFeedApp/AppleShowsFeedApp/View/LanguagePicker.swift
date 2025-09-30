@@ -11,7 +11,7 @@ struct LanguagePicker: View {
     @Binding var selectedCountry: Storefront
 
     var body: some View {
-        Picker("Country", selection: $selectedCountry) {
+        Picker("Storefront", selection: $selectedCountry) {
             ForEach(Storefront.allCases) { country in
                 Text(country.displayName).tag(country)
             }
