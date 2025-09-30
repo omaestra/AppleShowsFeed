@@ -13,10 +13,10 @@ public enum Storefront: String, CaseIterable, Identifiable {
     case spain = "es"
     
     public var id: String { rawValue }
-    public var displayName: String {
+    public var displayName: LocalizedStringResource {
         switch self {
-        case .canada: return String(localized: "storefront.canada.label", locale: self.locale)
-        case .spain: return String(localized: "storefront.spain.label", locale: self.locale)
+        case .canada: return LocalizedStringResource(stringLiteral: "storefront.canada.label")
+        case .spain: return LocalizedStringResource(stringLiteral: "storefront.spain.label")
         }
     }
     
