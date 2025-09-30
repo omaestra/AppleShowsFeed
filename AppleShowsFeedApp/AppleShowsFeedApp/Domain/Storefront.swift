@@ -19,4 +19,11 @@ public enum Storefront: String, CaseIterable, Identifiable {
         case .spain: return "🇪🇸 Spain Store"
         }
     }
+    
+    public var locale: Locale {
+        switch self {
+        case .canada: Locale(identifier: "en_CA")
+        case .spain: Locale(identifier: "es_ES")
+        }
+    }
 }

@@ -22,4 +22,9 @@ final class StorefrontTests: XCTestCase {
         XCTAssertEqual(Storefront.canada.displayName, "🇨🇦 Canada Store")
         XCTAssertEqual(Storefront.spain.displayName, "🇪🇸 Spain Store")
     }
+    
+    func test_locale_returnsExpectedLocales() {
+        XCTAssertEqual(Storefront.canada.locale.identifier, "en_CA")
+        XCTAssertEqual(Storefront.spain.locale.identifier, "es_ES")
+    }
 }
