@@ -11,7 +11,7 @@ import AppleShowsFeed
 @main
 struct AppleShowsFeedApp: App {
     /// Hardcoded country value to simply display different feeds by country.
-    @State private var selectedCountry: Storefront = .canada
+    @State private var selectedStore: Storefront = .canada
     @State private var router = Router()
     
     private static let httpClient: HTTPClient = {
@@ -28,7 +28,7 @@ struct AppleShowsFeedApp: App {
         WindowGroup {
             NavigationStack(path: $router.path) {
                 MoviesListUIComposer.composedWith(
-                    loader: makeLoader(for: selectedCountry.id),
+                    loader: makeLoader(for: selectedStore.id),
                     onSelection: { movie in
                         let viewModel = MovieDetailsViewModel(
                             imageURL: movie.images.last?.url,
@@ -44,10 +44,10 @@ struct AppleShowsFeedApp: App {
                         router.navigate(to: .movieDetails(viewModel))
                     }
                 )
-                .id(selectedCountry.id)
+                .id(selectedStore.id)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
-                        LanguagePicker(selectedCountry: $selectedCountry)
+                        LanguagePicker(selectedCountry: $selectedStore)
                     }
                 }
                 .navigationDestination(for: Router.Destination.self) { destination in
