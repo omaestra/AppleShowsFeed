@@ -58,7 +58,7 @@ struct MovieCellView: View {
     let viewModel: MovieCellViewModel
     
     var body: some View {
-        HStack(alignment: .top, spacing: 12) {
+        HStack(spacing: 12) {
             AsyncImage(url: viewModel.imageURL) { image in
                 image
                     .resizable()
@@ -100,6 +100,14 @@ struct MovieCellView: View {
                 .font(.footnote)
             }
             .frame(maxHeight: .infinity)
+            
+            Spacer()
+            
+            // Disclosure indicator (system chevron)
+            Image(systemName: "chevron.right")
+                .foregroundStyle(.tertiary)
+                .imageScale(.small)
+                .padding(.top, 4)
         }
         .frame(height: 150)
         .padding(.vertical, 8)
