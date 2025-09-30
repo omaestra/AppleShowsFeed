@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct LanguagePicker: View {
-    @Binding var selectedCountry: Country
+    @Binding var selectedCountry: Storefront
 
     var body: some View {
         Picker("Country", selection: $selectedCountry) {
-            ForEach(Country.allCases) { country in
+            ForEach(Storefront.allCases) { country in
                 Text(country.displayName).tag(country)
             }
         }
