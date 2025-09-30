@@ -161,6 +161,38 @@
         }
       }
     },
+    "storefront.canada.label" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Canada store"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tienda de Canada"
+          }
+        }
+      }
+    },
+    "storefront.spain.label" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spain store"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tienda de España"
+          }
+        }
+      }
+    },
     "storefront.title" : {
       "extractionState" : "manual",
       "localizations" : {
