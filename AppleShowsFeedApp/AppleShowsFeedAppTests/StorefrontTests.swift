@@ -19,8 +19,8 @@ final class StorefrontTests: XCTestCase {
     }
     
     func test_displayName_returnsCorrectName() {
-        XCTAssertEqual(Storefront.canada.displayName, "🇨🇦 Canada Store")
-        XCTAssertEqual(Storefront.spain.displayName, "🇪🇸 Spain Store")
+        XCTAssertEqual(Storefront.canada.displayName, "Canada store")
+        XCTAssertEqual(Storefront.spain.displayName, "Spain store")
     }
     
     func test_locale_returnsExpectedLocales() {
